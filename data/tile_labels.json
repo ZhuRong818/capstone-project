@@ -1,0 +1,20 @@
+{
+  "labels": [
+    "agent",
+    "boots",
+    "box",
+    "coin",
+    "door_locked",
+    "door_open",
+    "exit",
+    "floor",
+    "gem",
+    "ghost",
+    "key",
+    "lava",
+    "shield",
+    "wall"
+  ],
+  "image_size": 32,
+  "best_val_acc": 95.52631578947368
+}

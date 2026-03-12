@@ -1,0 +1,5229 @@
+{
+  "config": {
+    "levels_from": 3,
+    "levels_to": 11,
+    "ml_mode": "both",
+    "perturbations": [
+      "none",
+      "brightness",
+      "contrast",
+      "noise",
+      "combined"
+    ],
+    "seeds": [
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "strength": 0.2,
+    "turn_limit": 150
+  },
+  "overall_summary": {
+    "hybrid|brightness": {
+      "avg_reward": -88.24444444444444,
+      "n": 45.0,
+      "reward_sum": -3971.0,
+      "win_rate": 0.9555555555555556,
+      "wins": 43.0
+    },
+    "hybrid|combined": {
+      "avg_reward": -79.24444444444444,
+      "n": 45.0,
+      "reward_sum": -3566.0,
+      "win_rate": 0.9555555555555556,
+      "wins": 43.0
+    },
+    "hybrid|contrast": {
+      "avg_reward": -94.77777777777777,
+      "n": 45.0,
+      "reward_sum": -4265.0,
+      "win_rate": 0.9333333333333333,
+      "wins": 42.0
+    },
+    "hybrid|noise": {
+      "avg_reward": -89.97777777777777,
+      "n": 45.0,
+      "reward_sum": -4049.0,
+      "win_rate": 0.9333333333333333,
+      "wins": 42.0
+    },
+    "hybrid|none": {
+      "avg_reward": -86.04444444444445,
+      "n": 45.0,
+      "reward_sum": -3872.0,
+      "win_rate": 0.9555555555555556,
+      "wins": 43.0
+    },
+    "template|brightness": {
+      "avg_reward": -69.77777777777777,
+      "n": 45.0,
+      "reward_sum": -3140.0,
+      "win_rate": 0.9777777777777777,
+      "wins": 44.0
+    },
+    "template|combined": {
+      "avg_reward": -336.8,
+      "n": 45.0,
+      "reward_sum": -15156.0,
+      "win_rate": 0.28888888888888886,
+      "wins": 13.0
+    },
+    "template|contrast": {
+      "avg_reward": -73.17777777777778,
+      "n": 45.0,
+      "reward_sum": -3293.0,
+      "win_rate": 0.9777777777777777,
+      "wins": 44.0
+    },
+    "template|noise": {
+      "avg_reward": -63.577777777777776,
+      "n": 45.0,
+      "reward_sum": -2861.0,
+      "win_rate": 1.0,
+      "wins": 45.0
+    },
+    "template|none": {
+      "avg_reward": -77.97777777777777,
+      "n": 45.0,
+      "reward_sum": -3509.0,
+      "win_rate": 0.9777777777777777,
+      "wins": 44.0
+    }
+  },
+  "per_level_summary": {
+    "hybrid|brightness|L10|build_level_combined_mechanics": {
+      "avg_reward": -100.2,
+      "n": 5.0,
+      "reward_sum": -501.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L11|build_level_boss": {
+      "avg_reward": -169.0,
+      "n": 5.0,
+      "reward_sum": -845.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|brightness|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L5|build_level_hazard_detour": {
+      "avg_reward": -46.2,
+      "n": 5.0,
+      "reward_sum": -231.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L6|build_level_pushable_box": {
+      "avg_reward": -133.8,
+      "n": 5.0,
+      "reward_sum": -669.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|brightness|L8|build_level_power_ghost": {
+      "avg_reward": -131.4,
+      "n": 5.0,
+      "reward_sum": -657.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|brightness|L9|build_level_power_boots": {
+      "avg_reward": -72.6,
+      "n": 5.0,
+      "reward_sum": -363.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L10|build_level_combined_mechanics": {
+      "avg_reward": -95.4,
+      "n": 5.0,
+      "reward_sum": -477.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L11|build_level_boss": {
+      "avg_reward": -172.6,
+      "n": 5.0,
+      "reward_sum": -863.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|combined|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L6|build_level_pushable_box": {
+      "avg_reward": -67.2,
+      "n": 5.0,
+      "reward_sum": -336.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L7|build_level_power_shield": {
+      "avg_reward": -43.2,
+      "n": 5.0,
+      "reward_sum": -216.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|combined|L8|build_level_power_ghost": {
+      "avg_reward": -153.0,
+      "n": 5.0,
+      "reward_sum": -765.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|combined|L9|build_level_power_boots": {
+      "avg_reward": -37.8,
+      "n": 5.0,
+      "reward_sum": -189.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L10|build_level_combined_mechanics": {
+      "avg_reward": -159.6,
+      "n": 5.0,
+      "reward_sum": -798.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|contrast|L11|build_level_boss": {
+      "avg_reward": -98.8,
+      "n": 5.0,
+      "reward_sum": -494.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L5|build_level_hazard_detour": {
+      "avg_reward": -47.4,
+      "n": 5.0,
+      "reward_sum": -237.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L6|build_level_pushable_box": {
+      "avg_reward": -103.8,
+      "n": 5.0,
+      "reward_sum": -519.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L7|build_level_power_shield": {
+      "avg_reward": -45.6,
+      "n": 5.0,
+      "reward_sum": -228.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|contrast|L8|build_level_power_ghost": {
+      "avg_reward": -214.8,
+      "n": 5.0,
+      "reward_sum": -1074.0,
+      "win_rate": 0.6,
+      "wins": 3.0
+    },
+    "hybrid|contrast|L9|build_level_power_boots": {
+      "avg_reward": -84.0,
+      "n": 5.0,
+      "reward_sum": -420.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L10|build_level_combined_mechanics": {
+      "avg_reward": -159.6,
+      "n": 5.0,
+      "reward_sum": -798.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|noise|L11|build_level_boss": {
+      "avg_reward": -100.0,
+      "n": 5.0,
+      "reward_sum": -500.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L6|build_level_pushable_box": {
+      "avg_reward": -123.0,
+      "n": 5.0,
+      "reward_sum": -615.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|noise|L8|build_level_power_ghost": {
+      "avg_reward": -128.4,
+      "n": 5.0,
+      "reward_sum": -642.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|noise|L9|build_level_power_boots": {
+      "avg_reward": -112.8,
+      "n": 5.0,
+      "reward_sum": -564.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|none|L10|build_level_combined_mechanics": {
+      "avg_reward": -159.6,
+      "n": 5.0,
+      "reward_sum": -798.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|none|L11|build_level_boss": {
+      "avg_reward": -97.6,
+      "n": 5.0,
+      "reward_sum": -488.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L6|build_level_pushable_box": {
+      "avg_reward": -123.0,
+      "n": 5.0,
+      "reward_sum": -615.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "hybrid|none|L8|build_level_power_ghost": {
+      "avg_reward": -128.4,
+      "n": 5.0,
+      "reward_sum": -642.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "hybrid|none|L9|build_level_power_boots": {
+      "avg_reward": -79.8,
+      "n": 5.0,
+      "reward_sum": -399.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L10|build_level_combined_mechanics": {
+      "avg_reward": -94.8,
+      "n": 5.0,
+      "reward_sum": -474.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L11|build_level_boss": {
+      "avg_reward": -164.8,
+      "n": 5.0,
+      "reward_sum": -824.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "template|brightness|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L6|build_level_pushable_box": {
+      "avg_reward": -101.4,
+      "n": 5.0,
+      "reward_sum": -507.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L8|build_level_power_ghost": {
+      "avg_reward": -52.8,
+      "n": 5.0,
+      "reward_sum": -264.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|brightness|L9|build_level_power_boots": {
+      "avg_reward": -28.2,
+      "n": 5.0,
+      "reward_sum": -141.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|combined|L10|build_level_combined_mechanics": {
+      "avg_reward": -377.4,
+      "n": 5.0,
+      "reward_sum": -1887.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|combined|L11|build_level_boss": {
+      "avg_reward": -376.8,
+      "n": 5.0,
+      "reward_sum": -1884.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|combined|L3|build_level_required_multiple": {
+      "avg_reward": -217.8,
+      "n": 5.0,
+      "reward_sum": -1089.0,
+      "win_rate": 0.6,
+      "wins": 3.0
+    },
+    "template|combined|L4|build_level_key_door": {
+      "avg_reward": -284.4,
+      "n": 5.0,
+      "reward_sum": -1422.0,
+      "win_rate": 0.4,
+      "wins": 2.0
+    },
+    "template|combined|L5|build_level_hazard_detour": {
+      "avg_reward": -289.2,
+      "n": 5.0,
+      "reward_sum": -1446.0,
+      "win_rate": 0.4,
+      "wins": 2.0
+    },
+    "template|combined|L6|build_level_pushable_box": {
+      "avg_reward": -382.2,
+      "n": 5.0,
+      "reward_sum": -1911.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|combined|L7|build_level_power_shield": {
+      "avg_reward": -368.4,
+      "n": 5.0,
+      "reward_sum": -1842.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|combined|L8|build_level_power_ghost": {
+      "avg_reward": -369.6,
+      "n": 5.0,
+      "reward_sum": -1848.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|combined|L9|build_level_power_boots": {
+      "avg_reward": -365.4,
+      "n": 5.0,
+      "reward_sum": -1827.0,
+      "win_rate": 0.2,
+      "wins": 1.0
+    },
+    "template|contrast|L10|build_level_combined_mechanics": {
+      "avg_reward": -90.6,
+      "n": 5.0,
+      "reward_sum": -453.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L11|build_level_boss": {
+      "avg_reward": -102.4,
+      "n": 5.0,
+      "reward_sum": -512.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L4|build_level_key_door": {
+      "avg_reward": -37.2,
+      "n": 5.0,
+      "reward_sum": -186.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L5|build_level_hazard_detour": {
+      "avg_reward": -46.2,
+      "n": 5.0,
+      "reward_sum": -231.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L6|build_level_pushable_box": {
+      "avg_reward": -94.2,
+      "n": 5.0,
+      "reward_sum": -471.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L7|build_level_power_shield": {
+      "avg_reward": -44.4,
+      "n": 5.0,
+      "reward_sum": -222.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|contrast|L8|build_level_power_ghost": {
+      "avg_reward": -134.4,
+      "n": 5.0,
+      "reward_sum": -672.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "template|contrast|L9|build_level_power_boots": {
+      "avg_reward": -46.2,
+      "n": 5.0,
+      "reward_sum": -231.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L10|build_level_combined_mechanics": {
+      "avg_reward": -87.0,
+      "n": 5.0,
+      "reward_sum": -435.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L11|build_level_boss": {
+      "avg_reward": -98.8,
+      "n": 5.0,
+      "reward_sum": -494.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L6|build_level_pushable_box": {
+      "avg_reward": -123.0,
+      "n": 5.0,
+      "reward_sum": -615.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L8|build_level_power_ghost": {
+      "avg_reward": -48.0,
+      "n": 5.0,
+      "reward_sum": -240.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|noise|L9|build_level_power_boots": {
+      "avg_reward": -29.4,
+      "n": 5.0,
+      "reward_sum": -147.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L10|build_level_combined_mechanics": {
+      "avg_reward": -87.0,
+      "n": 5.0,
+      "reward_sum": -435.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L11|build_level_boss": {
+      "avg_reward": -97.6,
+      "n": 5.0,
+      "reward_sum": -488.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L3|build_level_required_multiple": {
+      "avg_reward": -63.0,
+      "n": 5.0,
+      "reward_sum": -315.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L4|build_level_key_door": {
+      "avg_reward": -36.0,
+      "n": 5.0,
+      "reward_sum": -180.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L5|build_level_hazard_detour": {
+      "avg_reward": -45.0,
+      "n": 5.0,
+      "reward_sum": -225.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L6|build_level_pushable_box": {
+      "avg_reward": -123.0,
+      "n": 5.0,
+      "reward_sum": -615.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L7|build_level_power_shield": {
+      "avg_reward": -42.0,
+      "n": 5.0,
+      "reward_sum": -210.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    },
+    "template|none|L8|build_level_power_ghost": {
+      "avg_reward": -128.4,
+      "n": 5.0,
+      "reward_sum": -642.0,
+      "win_rate": 0.8,
+      "wins": 4.0
+    },
+    "template|none|L9|build_level_power_boots": {
+      "avg_reward": -79.8,
+      "n": 5.0,
+      "reward_sum": -399.0,
+      "win_rate": 1.0,
+      "wins": 5.0
+    }
+  },
+  "records": [
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -118.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -291.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -93.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -21.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -108.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -88.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -54.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -117.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -66.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -33.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -99.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "brightness",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -93.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -54.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -69.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -99.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -136.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -54.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -51.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -75.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -60.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -57.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -90.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -60.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -33.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "contrast",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -39.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -124.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -111.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -51.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 11,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "template",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -118.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -291.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "none",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -105.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -51.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -177.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -93.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -109.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -39.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -243.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -129.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "brightness",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -57.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -27.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -60.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -72.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -33.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -124.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -450.0,
+      "seed": 12,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -291.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -54.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "contrast",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -33.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -130.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -123.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -48.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -87.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "noise",
+      "reward": -84.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -42.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -48.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -27.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -90.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -90.0,
+      "seed": 10,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -33.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -48.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -90.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -57.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -93.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -121.0,
+      "seed": 11,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -123.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -42.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -117.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -27.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -93.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -118.0,
+      "seed": 12,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -120.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -42.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 13,
+      "win": false
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -51.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -108.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -84.0,
+      "seed": 13,
+      "win": true
+    },
+    {
+      "level_idx": 3,
+      "level_name": "build_level_required_multiple",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -63.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 4,
+      "level_name": "build_level_key_door",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -36.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 5,
+      "level_name": "build_level_hazard_detour",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -45.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 6,
+      "level_name": "build_level_pushable_box",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -33.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 7,
+      "level_name": "build_level_power_shield",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -42.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 8,
+      "level_name": "build_level_power_ghost",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -60.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 9,
+      "level_name": "build_level_power_boots",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -27.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 10,
+      "level_name": "build_level_combined_mechanics",
+      "lose": false,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -93.0,
+      "seed": 14,
+      "win": true
+    },
+    {
+      "level_idx": 11,
+      "level_name": "build_level_boss",
+      "lose": true,
+      "mode": "hybrid",
+      "perturb": "combined",
+      "reward": -450.0,
+      "seed": 14,
+      "win": false
+    }
+  ]
+}

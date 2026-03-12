@@ -1,0 +1,24 @@
+name: cs2109s-ay2526s2-capstone-project
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.13
+  - pip
+  - numpy==2.3.0
+  - pandas==2.3.0
+  - scikit-learn==1.7.0
+  - matplotlib==3.10
+  - pillow==11.2.1
+  - scipy==1.15.3
+  - sympy==1.14.0
+  - joblib==1.5.1
+  - seaborn=0.13 # not available in Coursemology
+  - notebook=7.2 # not available in Coursemology
+  - ipympl # not available in Coursemology
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cpu
+      - torch==2.7.0
+      - torchvision==0.22.0
+      - grid-adventure @ git+https://github.com/grid-universe/grid-adventure-v1.git
+      - grid-play @ git+https://github.com/grid-universe/grid-play.git

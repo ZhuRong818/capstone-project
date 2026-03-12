@@ -1,0 +1,133 @@
+{
+  "chosen": "UP",
+  "flip_y": false,
+  "grid_height": 7,
+  "grid_width": 7,
+  "hint_agent_pos": null,
+  "label_counts": {
+    "door_locked": 1,
+    "exit": 1,
+    "gem": 1,
+    "wall": 16
+  },
+  "label_grid": [
+    [
+      "floor",
+      "floor",
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "floor",
+      "floor",
+      "floor",
+      "floor",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "wall",
+      "floor",
+      "wall"
+    ],
+    [
+      "wall",
+      "floor",
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "gem"
+    ],
+    [
+      "floor",
+      "wall",
+      "agent",
+      "door_locked",
+      "floor",
+      "floor",
+      "floor"
+    ],
+    [
+      "floor",
+      "floor",
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "wall"
+    ],
+    [
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "floor",
+      "floor",
+      "exit"
+    ]
+  ],
+  "legal": [
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "UP"
+  ],
+  "level_hint": {
+    "config_height": 7,
+    "config_movement": "cardinal",
+    "config_objective": "collect_exit",
+    "config_seed": 13,
+    "config_turn_limit": 150,
+    "config_width": 7
+  },
+  "ml_local_conf": [
+    {
+      "conf": 0.7454,
+      "label": "wall",
+      "pos": [
+        1,
+        4
+      ]
+    },
+    {
+      "conf": 0.6865,
+      "label": "floor",
+      "pos": [
+        2,
+        3
+      ]
+    },
+    {
+      "conf": 0.6851,
+      "label": "floor",
+      "pos": [
+        2,
+        4
+      ]
+    }
+  ],
+  "parsed_agent_pos": [
+    2,
+    4
+  ],
+  "source": "fallback_grid",
+  "tag": "run_32144_1773244925436_seq_000041_turn_0040",
+  "target_memory_sizes": {
+    "boots": 0,
+    "door_locked": 0,
+    "exit": 0,
+    "gem": 0,
+    "ghost": 0,
+    "key": 0,
+    "shield": 0
+  }
+}
