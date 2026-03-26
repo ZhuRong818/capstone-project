@@ -1,0 +1,93 @@
+{
+  "chosen": "LEFT",
+  "flip_y": null,
+  "grid_height": 7,
+  "grid_width": 7,
+  "hint_agent_pos": null,
+  "label_counts": {},
+  "label_grid": [
+    [
+      "floor",
+      "floor",
+      "floor",
+      "wall",
+      "shield",
+      "floor",
+      "floor"
+    ],
+    [
+      "wall",
+      "wall",
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "floor"
+    ],
+    [
+      "boots",
+      "floor",
+      "floor",
+      "wall",
+      "coin",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "agent",
+      "coin",
+      "floor",
+      "lava",
+      "gem"
+    ],
+    [
+      "floor",
+      "wall",
+      "box",
+      "wall",
+      "key",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "wall",
+      "wall",
+      "floor",
+      "wall",
+      "coin"
+    ],
+    [
+      "exit",
+      "door_locked",
+      "coin",
+      "coin",
+      "floor",
+      "floor",
+      "floor"
+    ]
+  ],
+  "legal": [
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "UP"
+  ],
+  "level_hint": {},
+  "ml_local_conf": [],
+  "parsed_agent_pos": null,
+  "source": "fallback_grid",
+  "tag": "run_6982_1773835857051_seq_000021_turn_0020",
+  "target_memory_sizes": {
+    "boots": 1,
+    "door_locked": 1,
+    "exit": 1,
+    "gem": 1,
+    "ghost": 0,
+    "key": 1,
+    "shield": 1
+  }
+}

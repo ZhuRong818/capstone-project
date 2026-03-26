@@ -1,0 +1,61 @@
+{
+  "rows": [
+    {
+      "level": "boss",
+      "lose": false,
+      "observation_type": "gridstate",
+      "reward": -148.0,
+      "runtime_sec": 0.794,
+      "seed": 42,
+      "win": true
+    },
+    {
+      "level": "boss",
+      "lose": false,
+      "observation_type": "gridstate",
+      "reward": -148.0,
+      "runtime_sec": 0.695,
+      "seed": 43,
+      "win": true
+    },
+    {
+      "level": "boss",
+      "lose": false,
+      "observation_type": "image",
+      "reward": -285.0,
+      "runtime_sec": 13.206,
+      "seed": 42,
+      "win": true
+    },
+    {
+      "level": "boss",
+      "lose": false,
+      "observation_type": "image",
+      "reward": -285.0,
+      "runtime_sec": 12.995,
+      "seed": 43,
+      "win": true
+    }
+  ],
+  "summary": {
+    "avg_reward": -216.5,
+    "avg_runtime_sec": 6.922499999999999,
+    "by_bucket": {
+      "boss|gridstate": {
+        "avg_reward": -148.0,
+        "avg_runtime_sec": 0.7444999999999999,
+        "episodes": 2,
+        "wins": 2
+      },
+      "boss|image": {
+        "avg_reward": -285.0,
+        "avg_runtime_sec": 13.1005,
+        "episodes": 2,
+        "wins": 2
+      }
+    },
+    "episodes": 4,
+    "losses": 0,
+    "wins": 4
+  }
+}

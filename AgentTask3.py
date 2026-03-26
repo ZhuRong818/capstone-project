@@ -54,7 +54,9 @@ class Agent:
         self._mem_keys: int = 0
         self._mem_shield: bool = False
         self._mem_ghost: bool = False
-        self._ghost_turn_duration: int = 5
+        # In image mode, status parsing can miss active phasing. Use a longer
+        # turn-bounded memory to avoid dropping phase assumptions too early.
+        self._ghost_turn_duration: int = max(5, int(os.environ.get("AGENT_GHOST_TURNS", "30")))
         self._mem_ghost_turns: int = 0
 
         # Lightweight parse stats
@@ -282,8 +284,41 @@ class Agent:
                         continue
                     door_adj_targets.add((tx, ty))
 
-        need_key_for_door = bool(locked_doors) and keys_count == 0 and bool(keys_on_ground)
-        need_shield_for_lava = bool(lava) and not has_shield
+        primary_targets = list(gems) if gems else list(exits)
+
+        need_key_for_door = bool(locked_doors) and keys_count == 0 and bool(keys_on_ground) and not has_ghost
+        if need_key_for_door and primary_targets:
+            blocked_no_key = set(walls) | set(locked_doors)
+            if not has_shield:
+                blocked_no_key |= lava
+            blocked_no_key.discard(agent_pos)
+            probe_act, _ = self._bfs_first_action(agent_pos, primary_targets, width, height, blocked_no_key)
+            need_key_for_door = probe_act is None
+
+        need_shield_for_lava = False
+        if bool(lava) and not has_shield and bool(shields_on_ground):
+            probe_targets = primary_targets if primary_targets else list(exits)
+            if probe_targets:
+                blocked_no_shield = set()
+                if not has_ghost:
+                    blocked_no_shield |= walls
+                    blocked_no_shield |= locked_doors
+                blocked_no_shield |= lava
+                blocked_no_shield.discard(agent_pos)
+                probe_act, _ = self._bfs_first_action(agent_pos, probe_targets, width, height, blocked_no_shield)
+                need_shield_for_lava = probe_act is None
+
+        need_ghost_for_block = False
+        if ghosts_on_ground and not has_ghost:
+            probe_targets = primary_targets if primary_targets else list(exits)
+            if probe_targets:
+                blocked_no_ghost = set(walls) | set(locked_doors)
+                if not has_shield:
+                    blocked_no_ghost |= lava
+                blocked_no_ghost.discard(agent_pos)
+                probe_act, _ = self._bfs_first_action(agent_pos, probe_targets, width, height, blocked_no_ghost)
+                need_ghost_for_block = probe_act is None
+
         powerups = set(shields_on_ground) | set(ghosts_on_ground) | set(boots_on_ground)
 
         blocked = set()
@@ -325,6 +360,8 @@ class Agent:
         target_groups: List[set] = []
         if need_key_for_door and keys_on_ground:
             target_groups.append(set(keys_on_ground))
+        if need_ghost_for_block and ghosts_on_ground:
+            target_groups.append(set(ghosts_on_ground))
         if door_adj_targets:
             target_groups.append(set(door_adj_targets))
         if need_shield_for_lava and shields_on_ground:
@@ -344,10 +381,18 @@ class Agent:
                 target_groups.append(set(powerups))
         else:
             # After required objective, prioritize exit for robustness.
-            if exits:
-                target_groups.append(set(exits))
-            if coins:
-                target_groups.append(set(coins))
+            if self._step_input_is_image:
+                # In image mode, optional coins are often on the natural route and
+                # improve reward noticeably; collect before exiting.
+                if coins:
+                    target_groups.append(set(coins))
+                if exits:
+                    target_groups.append(set(exits))
+            else:
+                if exits:
+                    target_groups.append(set(exits))
+                if coins:
+                    target_groups.append(set(coins))
             if keys_on_ground:
                 target_groups.append(set(keys_on_ground))
             if powerups:

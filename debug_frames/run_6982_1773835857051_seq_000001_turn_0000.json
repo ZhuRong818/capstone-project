@@ -1,0 +1,90 @@
+{
+  "chosen": "RIGHT",
+  "flip_y": null,
+  "grid_height": 7,
+  "grid_width": 7,
+  "hint_agent_pos": null,
+  "label_counts": {},
+  "label_grid": [
+    [
+      "agent",
+      "floor",
+      "floor",
+      "wall",
+      "shield",
+      "floor",
+      "floor"
+    ],
+    [
+      "wall",
+      "wall",
+      "box",
+      "wall",
+      "floor",
+      "wall",
+      "floor"
+    ],
+    [
+      "boots",
+      "coin",
+      "floor",
+      "wall",
+      "coin",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "ghost",
+      "coin",
+      "floor",
+      "lava",
+      "gem"
+    ],
+    [
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "key",
+      "wall",
+      "floor"
+    ],
+    [
+      "gem",
+      "wall",
+      "wall",
+      "wall",
+      "floor",
+      "wall",
+      "coin"
+    ],
+    [
+      "exit",
+      "door_locked",
+      "coin",
+      "coin",
+      "floor",
+      "floor",
+      "floor"
+    ]
+  ],
+  "legal": [
+    "RIGHT"
+  ],
+  "level_hint": {},
+  "ml_local_conf": [],
+  "parsed_agent_pos": null,
+  "source": "reason",
+  "tag": "run_6982_1773835857051_seq_000001_turn_0000",
+  "target_memory_sizes": {
+    "boots": 1,
+    "door_locked": 1,
+    "exit": 1,
+    "gem": 2,
+    "ghost": 1,
+    "key": 1,
+    "shield": 1
+  }
+}

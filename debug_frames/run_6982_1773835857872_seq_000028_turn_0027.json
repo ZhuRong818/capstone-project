@@ -1,0 +1,138 @@
+{
+  "chosen": "PICK_UP",
+  "flip_y": false,
+  "grid_height": 7,
+  "grid_width": 7,
+  "hint_agent_pos": null,
+  "label_counts": {
+    "agent": 1,
+    "boots": 1,
+    "box": 1,
+    "coin": 6,
+    "door_locked": 1,
+    "exit": 1,
+    "lava": 1,
+    "shield": 1,
+    "wall": 15
+  },
+  "label_grid": [
+    [
+      "floor",
+      "floor",
+      "floor",
+      "wall",
+      "shield",
+      "floor",
+      "floor"
+    ],
+    [
+      "wall",
+      "wall",
+      "floor",
+      "wall",
+      "floor",
+      "wall",
+      "floor"
+    ],
+    [
+      "boots",
+      "coin",
+      "floor",
+      "wall",
+      "coin",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "floor",
+      "coin",
+      "floor",
+      "lava",
+      "agent"
+    ],
+    [
+      "floor",
+      "wall",
+      "box",
+      "wall",
+      "floor",
+      "wall",
+      "floor"
+    ],
+    [
+      "floor",
+      "wall",
+      "wall",
+      "wall",
+      "floor",
+      "wall",
+      "coin"
+    ],
+    [
+      "exit",
+      "door_locked",
+      "coin",
+      "coin",
+      "floor",
+      "floor",
+      "floor"
+    ]
+  ],
+  "legal": [
+    "PICK_UP",
+    "DOWN",
+    "LEFT",
+    "UP"
+  ],
+  "level_hint": {
+    "config_height": 7,
+    "config_movement": "cardinal",
+    "config_objective": "collect_exit",
+    "config_seed": 2,
+    "config_turn_limit": 150,
+    "config_width": 7
+  },
+  "ml_local_conf": [
+    {
+      "conf": 0.9835,
+      "label": "lava",
+      "pos": [
+        5,
+        3
+      ]
+    },
+    {
+      "conf": 0.633,
+      "label": "floor",
+      "pos": [
+        6,
+        2
+      ]
+    },
+    {
+      "conf": 0.6289,
+      "label": "floor",
+      "pos": [
+        6,
+        4
+      ]
+    }
+  ],
+  "parsed_agent_pos": [
+    6,
+    3
+  ],
+  "source": "forced_pickup",
+  "tag": "run_6982_1773835857872_seq_000028_turn_0027",
+  "target_memory_sizes": {
+    "boots": 1,
+    "door_locked": 1,
+    "exit": 1,
+    "gem": 1,
+    "ghost": 0,
+    "key": 0,
+    "shield": 1
+  }
+}

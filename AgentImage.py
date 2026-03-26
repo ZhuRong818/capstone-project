@@ -118,7 +118,9 @@ class Agent:
         self._expected_pickup_kind: Optional[str] = None
         self._mem_boots: bool = False
         self._mem_ghost: bool = False
-        self._ghost_turn_duration: int = max(1, int(os.environ.get("AGENT_GHOST_TURNS", "5")))
+        # In image mode, phasing status can be intermittently missed by parsing.
+        # Keep a longer bounded memory so we still exploit ghost routes reliably.
+        self._ghost_turn_duration: int = max(5, int(os.environ.get("AGENT_GHOST_TURNS", "30")))
         # We use turn-bounded ghost memory to avoid stale phasing assumptions.
         self._mem_ghost_turns: int = 0
         self._mem_shield: bool = False
@@ -815,36 +817,16 @@ class Agent:
                         continue
                     door_adj_targets.add((tx, ty))
 
-        # Set objective priority with explicit mechanics constraints:
-        # 1) If there are locked doors and we don't have a key, get a key first.
-        # 2) If lava exists and shield is not active, get shield first.
-        targets = []
         powerups = list(shields_on_ground | boots_on_ground | ghosts_on_ground)
         shield_targets = list(shields_on_ground)
-        need_shield_for_lava = bool(lava) and not has_shield
-        need_key_for_door = bool(locked_doors) and keys_count == 0 and bool(keys_on_ground)
+        primary_targets = list(gems) if gems else list(exits)
 
-        if need_key_for_door:
-            targets = list(keys_on_ground)
-        elif door_adj_targets:
-            targets = list(door_adj_targets)
-        elif need_shield_for_lava and shield_targets:
-            targets = shield_targets
-        elif gems:
-            targets = list(gems)
-        elif exits:
-            targets = list(exits)
-        elif keys_on_ground:
-            targets = list(keys_on_ground)
-        elif powerups:
-            targets = powerups
-        elif coins:
-            targets = list(coins)
-
-        if not targets:
-            self._expected_pickup_pos = None
-            self._expected_pickup_kind = None
-            return None
+        # Keep these checks lightweight in image mode to avoid wall-time timeouts.
+        need_key_for_door = bool(locked_doors) and keys_count == 0 and bool(keys_on_ground) and not has_ghost
+        need_shield_for_lava = bool(lava) and not has_shield and bool(shield_targets)
+        need_ghost_for_block = bool(ghosts_on_ground) and not has_ghost and bool(primary_targets) and bool(
+            walls or locked_doors
+        )
 
         # While ghost is active, immediately exploit phasing if that unlocks objectives.
         if has_ghost and self._mem_ghost_turns > 0:
@@ -866,7 +848,7 @@ class Agent:
             elif door_adj_targets:
                 ghost_targets = list(door_adj_targets)
             else:
-                ghost_targets = list(targets)
+                ghost_targets = list(primary_targets) if primary_targets else list(powerups)
 
             plain_action, _ = self._bfs_first_action(agent_pos, ghost_targets, width, height, blocked_no_phase)
             phase_action, phase_target = self._bfs_first_action(agent_pos, ghost_targets, width, height, blocked_with_phase)
@@ -882,10 +864,62 @@ class Agent:
             blocked |= lava
         blocked.discard(agent_pos)
 
-        action, found_target = self._bfs_first_action(agent_pos, targets, width, height, blocked)
+        # Multi-stage targeting: if primary target is unreachable, try unlockers instead of
+        # falling back to random motion.
+        target_groups: List[set] = []
+        if need_key_for_door and keys_on_ground:
+            target_groups.append(set(keys_on_ground))
+        if need_ghost_for_block and ghosts_on_ground:
+            target_groups.append(set(ghosts_on_ground))
+        if door_adj_targets:
+            target_groups.append(set(door_adj_targets))
+        if need_shield_for_lava and shield_targets:
+            target_groups.append(set(shield_targets))
+
+        if gems:
+            target_groups.append(set(gems))
+            if keys_on_ground:
+                target_groups.append(set(keys_on_ground))
+            if shields_on_ground and not has_shield:
+                target_groups.append(set(shields_on_ground))
+            if ghosts_on_ground and not has_ghost:
+                target_groups.append(set(ghosts_on_ground))
+            if boots_on_ground and not has_boots:
+                target_groups.append(set(boots_on_ground))
+            if powerups:
+                target_groups.append(set(powerups))
+        else:
+            # In image mode, collect optional coin before exiting for better score.
+            if coins:
+                target_groups.append(set(coins))
+            if exits:
+                target_groups.append(set(exits))
+            if keys_on_ground:
+                target_groups.append(set(keys_on_ground))
+            if powerups:
+                target_groups.append(set(powerups))
+
+        action = None
+        found_target = None
+        seen_groups = set()
+        if len(target_groups) > 6:
+            target_groups = target_groups[:6]
+        for group in target_groups:
+            if not group:
+                continue
+            sig = frozenset(group)
+            if sig in seen_groups:
+                continue
+            seen_groups.add(sig)
+            action, found_target = self._bfs_first_action(agent_pos, list(group), width, height, blocked)
+            if action is not None:
+                break
+
         # If main objective is unreachable, try obtaining a powerup that may unlock traversal.
         if action is None and need_key_for_door and keys_on_ground:
             action, found_target = self._bfs_first_action(agent_pos, list(keys_on_ground), width, height, blocked)
+        if action is None and need_ghost_for_block and ghosts_on_ground:
+            action, found_target = self._bfs_first_action(agent_pos, list(ghosts_on_ground), width, height, blocked)
         if action is None and need_shield_for_lava and shield_targets:
             action, found_target = self._bfs_first_action(agent_pos, shield_targets, width, height, blocked)
         if action is None and powerups and not (has_ghost and has_boots and has_shield):

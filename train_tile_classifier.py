@@ -63,6 +63,28 @@ def collect_samples(asset_root: str) -> Tuple[List[Tuple[str, str]], List[str]]:
     return samples, sorted(labels)
 
 
+def collect_samples_multi(asset_roots: List[str]) -> Tuple[List[Tuple[str, str]], List[str], Dict[str, int]]:
+    samples: List[Tuple[str, str]] = []
+    labels = set()
+    seen_paths = set()
+    per_root_counts: Dict[str, int] = {}
+    for root in asset_roots:
+        root_abs = os.path.abspath(root)
+        root_samples, root_labels = collect_samples(root_abs)
+        kept = 0
+        for path, label in root_samples:
+            norm = os.path.abspath(path)
+            if norm in seen_paths:
+                continue
+            seen_paths.add(norm)
+            samples.append((norm, label))
+            labels.add(label)
+            kept += 1
+        per_root_counts[root_abs] = kept
+        labels.update(root_labels)
+    return samples, sorted(labels), per_root_counts
+
+
 @dataclass
 class TrainConfig:
     asset_root: str = "data/assets"
@@ -200,18 +222,41 @@ def stratified_split(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--asset_root", default="data/assets")
+    parser.add_argument(
+        "--asset_roots",
+        default="",
+        help="Comma-separated asset roots. If set, overrides --asset_root.",
+    )
+    parser.add_argument("--epochs", type=int, default=None)
+    parser.add_argument("--out_model", default=None)
+    parser.add_argument("--out_labels", default=None)
     args = parser.parse_args()
 
     cfg = TrainConfig()
-    cfg.asset_root = str(args.asset_root)
+    if args.epochs is not None:
+        cfg.epochs = int(args.epochs)
+    if args.out_model:
+        cfg.out_model = str(args.out_model)
+    if args.out_labels:
+        cfg.out_labels = str(args.out_labels)
     random.seed(cfg.seed)
     np.random.seed(cfg.seed)
     torch.manual_seed(cfg.seed)
 
-    asset_root = os.path.join(os.getcwd(), cfg.asset_root)
-    samples, labels = collect_samples(asset_root)
+    raw_roots = [p.strip() for p in str(args.asset_roots).split(",") if p.strip()]
+    if raw_roots:
+        asset_roots = [os.path.join(os.getcwd(), p) if not os.path.isabs(p) else p for p in raw_roots]
+    else:
+        cfg.asset_root = str(args.asset_root)
+        asset_roots = [os.path.join(os.getcwd(), cfg.asset_root)]
+
+    samples, labels, per_root_counts = collect_samples_multi(asset_roots)
     if not samples:
-        raise RuntimeError(f"No samples found in {asset_root}")
+        raise RuntimeError(f"No samples found in {asset_roots}")
+    print("asset roots:")
+    for root, count in per_root_counts.items():
+        print(f"  {root}: {count} samples")
+    print(f"total unique samples: {len(samples)}")
 
     label_to_idx: Dict[str, int] = {k: i for i, k in enumerate(labels)}
     indexed = [(p, label_to_idx[l]) for p, l in samples]
