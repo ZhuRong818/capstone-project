@@ -2,6 +2,11 @@
 from grid_adventure.grid import GridState
 from grid_adventure.env import ImageObservation
 from grid_adventure.levels.intro import build_level_boss
+from grid_adventure.constants import (
+    PHASING_POWERUP_DURATION,
+    SHIELD_POWERUP_USAGE,
+    SPEED_POWERUP_DURATION,
+)
 
 # State steppers
 from grid_adventure.step import Action
@@ -13,7 +18,7 @@ import os
 import random
 import copy
 import time
-from collections import deque
+from collections import OrderedDict, deque
 from typing import Dict, List, Optional, Tuple
 
 try:
@@ -51,10 +56,6 @@ if nn is not None:
         def forward(self, x):
             z = self.features(x).flatten(1)
             return self.head(z)
-else:
-    class _TinyTileNet:
-        def __init__(self, n_classes: int):
-            self.n_classes = n_classes
 
 
 class Agent:
@@ -106,7 +107,10 @@ class Agent:
         self._assets: Dict[str, List["np.ndarray"]] = {}
         self._assets_loaded = False
         self._template_cache: Dict[Tuple[int, int], Dict[str, Dict[str, "np.ndarray"]]] = {}
-        self._tile_cache: Dict[bytes, Optional[str]] = {}
+        self._tile_cache: "OrderedDict[bytes, Optional[str]]" = OrderedDict()
+        self._tile_cache_max_size: int = 4096
+        self._tile_hash_size: int = 8
+        self._tile_hash_levels: int = 16
         self._grid_size_cache: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self._ml_model = None
         self._ml_labels: List[str] = []
@@ -121,6 +125,23 @@ class Agent:
             "boots": 0.84,
             "agent": 0.72,
         }
+        self._template_thresholds: Dict[str, float] = {
+            "floor": 0.030,
+            "wall": 0.040,
+            "lava": 0.045,
+            "agent": 0.110,
+            "gem": 0.095,
+            "coin": 0.095,
+            "key": 0.105,
+            "boots": 0.105,
+            "ghost": 0.105,
+            "shield": 0.105,
+            "box": 0.100,
+            "door_locked": 0.115,
+            "door_open": 0.115,
+            "exit": 0.120,
+        }
+        self._ml_critical_labels = {"key", "door_open", "shield", "ghost", "boots", "gem"}
         # Default to hybrid perception. The grader can use unseen sprite variants,
         # and the tiny CNN is more tolerant to appearance shifts than templates alone.
         self._use_ml = os.environ.get("AGENT_USE_ML", "1") == "1"
@@ -154,16 +175,35 @@ class Agent:
         self._expected_pickup_pos: Optional[Tuple[int, int]] = None
         self._expected_pickup_kind: Optional[str] = None
         self._mem_boots: bool = False
+        self._boots_turn_duration_image: int = max(
+            1, int(os.environ.get("AGENT_BOOTS_TURNS_IMAGE", str(SPEED_POWERUP_DURATION)))
+        )
+        self._mem_boots_turns: int = 0
         self._mem_ghost: bool = False
         # Use different phasing-memory horizons for image vs structured input.
         # Image parsing can miss status transiently, while structured state does not.
+        # Image parsing can miss active phasing for a turn or two, so keep a
+        # modest cushion derived from the real effect duration rather than a
+        # long fixed horizon that would go stale on unseen layouts.
         self._ghost_turn_duration_image: int = max(
-            5, int(os.environ.get("AGENT_GHOST_TURNS_IMAGE", os.environ.get("AGENT_GHOST_TURNS", "30")))
+            1,
+            int(
+                os.environ.get(
+                    "AGENT_GHOST_TURNS_IMAGE",
+                    os.environ.get("AGENT_GHOST_TURNS", str(PHASING_POWERUP_DURATION * 3)),
+                )
+            ),
         )
-        self._ghost_turn_duration_grid: int = max(1, int(os.environ.get("AGENT_GHOST_TURNS_GRID", "5")))
+        self._ghost_turn_duration_grid: int = max(
+            1, int(os.environ.get("AGENT_GHOST_TURNS_GRID", str(PHASING_POWERUP_DURATION)))
+        )
         # We use turn-bounded ghost memory to avoid stale phasing assumptions.
         self._mem_ghost_turns: int = 0
         self._mem_shield: bool = False
+        self._shield_uses_image: int = max(
+            1, int(os.environ.get("AGENT_SHIELD_USES_IMAGE", str(SHIELD_POWERUP_USAGE)))
+        )
+        self._mem_shield_uses: int = 0
         self._mem_keys: int = 0
         self._last_seen_turn: Optional[int] = None
         self._visit_counts: Dict[Tuple[int, int], int] = {}
@@ -265,6 +305,8 @@ class Agent:
             cur_pos = self._find_agent_pos(grid_state)
             if cur_pos is not None:
                 self._visit_counts[cur_pos] = self._visit_counts.get(cur_pos, 0) + 1
+            if self._step_input_is_image:
+                self._refresh_powerup_memory_from_state(grid_state)
             boss_act = self._dedicated_boss_action(grid_state)
             if boss_act is not None and boss_act != Action.WAIT:
                 return self._return_action(state, grid_state, [], boss_act, "boss_script")
@@ -399,6 +441,16 @@ class Agent:
             self._mem_ghost_turns = 0
             self._mem_ghost = False
 
+        if self._mem_boots_turns > 0:
+            self._mem_boots_turns -= 1
+        if self._mem_boots_turns <= 0:
+            self._mem_boots_turns = 0
+            self._mem_boots = False
+
+        if self._mem_shield_uses <= 0:
+            self._mem_shield_uses = 0
+            self._mem_shield = False
+
         if self._exit_memory:
             nxt: Dict[Tuple[int, int], int] = {}
             for pos, ttl in self._exit_memory.items():
@@ -417,10 +469,13 @@ class Agent:
         self._visit_counts.clear()
         self._tile_label_streaks.clear()
         self._exit_memory.clear()
+        self._last_label_grid = []
         self._mem_boots = False
+        self._mem_boots_turns = 0
         self._mem_ghost = False
         self._mem_ghost_turns = 0
         self._mem_shield = False
+        self._mem_shield_uses = 0
         self._mem_keys = 0
         self._clear_expected_next_state()
 
@@ -578,14 +633,96 @@ class Agent:
         action: Action,
         source: str,
     ) -> Action:
+        self._consume_powerup_memory_for_action(grid_state, action)
         self._set_expected_next_state(observation, grid_state, action)
         self._dump_frame(observation, action, legal, source, grid_state)
         return action
+
+    def _activate_boots_memory(self) -> None:
+        self._mem_boots = True
+        dur = self._boots_turn_duration_image if self._step_input_is_image else SPEED_POWERUP_DURATION
+        self._mem_boots_turns = max(self._mem_boots_turns, int(dur) + 1)
 
     def _activate_ghost_memory(self) -> None:
         self._mem_ghost = True
         dur = self._ghost_turn_duration_image if self._step_input_is_image else self._ghost_turn_duration_grid
         self._mem_ghost_turns = max(self._mem_ghost_turns, int(dur) + 1)
+
+    def _activate_shield_memory(self) -> None:
+        self._mem_shield = True
+        uses = self._shield_uses_image if self._step_input_is_image else SHIELD_POWERUP_USAGE
+        self._mem_shield_uses = max(self._mem_shield_uses, int(uses))
+
+    def _has_boots_memory(self) -> bool:
+        return self._mem_boots and self._mem_boots_turns > 0
+
+    def _has_ghost_memory(self) -> bool:
+        return self._mem_ghost and self._mem_ghost_turns > 0
+
+    def _has_shield_memory(self) -> bool:
+        return self._mem_shield and self._mem_shield_uses > 0
+
+    def _refresh_powerup_memory_from_state(self, grid_state: GridState) -> None:
+        pos = self._find_agent_pos(grid_state)
+        if pos is None:
+            return
+        ax, ay = pos
+        try:
+            for obj in grid_state.grid[ax][ay]:
+                is_agent = getattr(obj, "agent", None) is not None or self._appearance_name(obj) in ("agent", "human")
+                if not is_agent:
+                    continue
+                inv = list(getattr(obj, "inventory_list", None) or [])
+                status = list(getattr(obj, "status_list", None) or [])
+                shield_uses = 0
+                boots_turns = 0
+                ghost_turns = 0
+                for item in inv + status:
+                    iname = self._appearance_name(item)
+                    if getattr(item, "immunity", None) is not None or iname == "shield":
+                        ul = getattr(item, "usage_limit", None)
+                        amount = getattr(ul, "amount", None)
+                        if isinstance(amount, (int, float)) and amount > 0:
+                            shield_uses = max(shield_uses, int(amount))
+                    if getattr(item, "speed", None) is not None or iname == "boots":
+                        tl = getattr(item, "time_limit", None)
+                        amount = getattr(tl, "amount", None)
+                        if isinstance(amount, (int, float)) and amount > 0:
+                            boots_turns = max(boots_turns, int(amount))
+                    if getattr(item, "phasing", None) is not None or iname == "ghost":
+                        tl = getattr(item, "time_limit", None)
+                        amount = getattr(tl, "amount", None)
+                        if isinstance(amount, (int, float)) and amount > 0:
+                            ghost_turns = max(ghost_turns, int(amount))
+                if shield_uses > 0:
+                    self._mem_shield = True
+                    self._mem_shield_uses = shield_uses
+                if boots_turns > 0:
+                    self._mem_boots = True
+                    self._mem_boots_turns = boots_turns
+                if ghost_turns > 0:
+                    self._mem_ghost = True
+                    self._mem_ghost_turns = ghost_turns
+                break
+        except Exception:
+            return
+
+    def _consume_powerup_memory_for_action(
+        self,
+        grid_state: Optional[GridState],
+        action: Action,
+    ) -> None:
+        if not self._step_input_is_image or grid_state is None:
+            return
+        if action not in (Action.RIGHT, Action.DOWN, Action.LEFT, Action.UP):
+            return
+        if not self._has_shield_memory():
+            return
+        if not (self._is_lava_move(grid_state, action) or self._is_lava_move_visual(grid_state, action)):
+            return
+        self._mem_shield_uses = max(0, self._mem_shield_uses - 1)
+        if self._mem_shield_uses <= 0:
+            self._mem_shield = False
 
     def _should_use_blind_explorer(self) -> bool:
         c = self._last_label_counts or {}
@@ -861,7 +998,7 @@ class Agent:
     def _has_shield_active(self, grid_state: GridState) -> bool:
         pos = self._find_agent_pos(grid_state)
         if pos is None:
-            return self._mem_shield if self._step_input_is_image else False
+            return self._has_shield_memory() if self._step_input_is_image else False
         ax, ay = pos
         try:
             for obj in grid_state.grid[ax][ay]:
@@ -875,12 +1012,12 @@ class Agent:
                         return True
         except Exception:
             pass
-        return self._mem_shield if self._step_input_is_image else False
+        return self._has_shield_memory() if self._step_input_is_image else False
 
     def _has_ghost_active(self, grid_state: GridState) -> bool:
         pos = self._find_agent_pos(grid_state)
         if pos is None:
-            return (self._mem_ghost or self._mem_ghost_turns > 0) if self._step_input_is_image else False
+            return self._has_ghost_memory() if self._step_input_is_image else False
         ax, ay = pos
         try:
             for obj in grid_state.grid[ax][ay]:
@@ -894,7 +1031,7 @@ class Agent:
                         return True
         except Exception:
             pass
-        return (self._mem_ghost or self._mem_ghost_turns > 0) if self._step_input_is_image else False
+        return self._has_ghost_memory() if self._step_input_is_image else False
 
     def _is_lava_move(self, grid_state: GridState, act: Action) -> bool:
         if act not in (Action.RIGHT, Action.DOWN, Action.LEFT, Action.UP):
@@ -1097,9 +1234,9 @@ class Agent:
 
         # Include memory fallback for powerups that were picked but not reflected in parsed status.
         if self._step_input_is_image:
-            has_boots = has_boots or self._mem_boots
-            has_ghost = has_ghost or self._mem_ghost or self._mem_ghost_turns > 0
-            has_shield = has_shield or self._mem_shield
+            has_boots = has_boots or self._has_boots_memory()
+            has_ghost = has_ghost or self._has_ghost_memory()
+            has_shield = has_shield or self._has_shield_memory()
             keys_count += max(0, int(self._mem_keys))
 
         is_intro_boss = self._matches_intro_boss_layout(
@@ -1128,11 +1265,11 @@ class Agent:
             )
         if should_pickup_now:
             if agent_pos in boots_on_ground:
-                self._mem_boots = True
+                self._activate_boots_memory()
             if agent_pos in ghosts_on_ground:
                 self._activate_ghost_memory()
             if agent_pos in shields_on_ground:
-                self._mem_shield = True
+                self._activate_shield_memory()
             if agent_pos in keys_on_ground:
                 self._mem_keys += 1
             self._forget_target_at(agent_pos)
@@ -1200,7 +1337,7 @@ class Agent:
                 need_ghost_for_block = probe_act is None
 
         # While ghost is active, immediately exploit phasing if that unlocks objectives.
-        if has_ghost and (not self._step_input_is_image or self._mem_ghost_turns > 0):
+        if has_ghost and (not self._step_input_is_image or self._has_ghost_memory()):
             blocked_no_phase = set(walls) | set(locked_doors)
             if not has_shield:
                 blocked_no_phase |= lava
@@ -1243,7 +1380,6 @@ class Agent:
                 agent_pos=agent_pos,
                 gems=gems,
                 exits=exits,
-                coins=coins,
                 ghosts_on_ground=ghosts_on_ground,
                 keys_on_ground=keys_on_ground,
                 shields_on_ground=shields_on_ground,
@@ -1478,7 +1614,6 @@ class Agent:
         agent_pos: Tuple[int, int],
         gems: set,
         exits: set,
-        coins: set,
         ghosts_on_ground: set,
         keys_on_ground: set,
         shields_on_ground: set,
@@ -1491,10 +1626,6 @@ class Agent:
         has_ghost: bool,
         has_shield: bool,
     ) -> Optional[Action]:
-        if agent_pos in gems or agent_pos in coins or agent_pos in ghosts_on_ground:
-            self._set_expected_pickup(agent_pos, keys_on_ground, shields_on_ground, boots_on_ground, ghosts_on_ground)
-            return Action.PICK_UP
-
         blocked = set()
         if not has_ghost:
             blocked |= walls
@@ -1597,9 +1728,9 @@ class Agent:
         if self._expected_pickup_kind == "key":
             self._mem_keys += 1
         elif self._expected_pickup_kind == "shield":
-            self._mem_shield = True
+            self._activate_shield_memory()
         elif self._expected_pickup_kind == "boots":
-            self._mem_boots = True
+            self._activate_boots_memory()
         elif self._expected_pickup_kind == "ghost":
             self._activate_ghost_memory()
 
@@ -1703,44 +1834,6 @@ class Agent:
             return next_state is not None
         except Exception:
             return False
-
-    def _state_fingerprint(self, grid_state: GridState) -> Tuple:
-        """Compact fingerprint for detecting no-op transitions."""
-        try:
-            width = int(getattr(grid_state, "width", 0))
-            height = int(getattr(grid_state, "height", 0))
-        except Exception:
-            return ()
-        agent_pos = self._find_agent_pos(grid_state)
-        counts = {
-            "gem": 0,
-            "coin": 0,
-            "key": 0,
-            "locked": 0,
-            "exit": 0,
-        }
-        for x in range(width):
-            for y in range(height):
-                for obj in grid_state.grid[x][y]:
-                    n = self._appearance_name(obj)
-                    if getattr(obj, "requirable", None) is not None or n in ("gem", "core"):
-                        counts["gem"] += 1
-                    if getattr(obj, "rewardable", None) is not None and n == "coin":
-                        counts["coin"] += 1
-                    if getattr(obj, "key", None) is not None or n == "key":
-                        counts["key"] += 1
-                    if getattr(obj, "locked", None) is not None or n in ("locked", "door_locked"):
-                        counts["locked"] += 1
-                    if getattr(obj, "exit", None) is not None or n == "exit":
-                        counts["exit"] += 1
-        return (
-            agent_pos,
-            counts["gem"],
-            counts["coin"],
-            counts["key"],
-            counts["locked"],
-            counts["exit"],
-        )
 
     def _on_collectible_tile(self, grid_state: GridState) -> bool:
         pos = self._find_agent_pos(grid_state)
@@ -1891,11 +1984,9 @@ class Agent:
             # Only relax legality if destination has something that memory could bypass.
             for obj in grid_state.grid[nx][ny]:
                 n = self._appearance_name(obj)
-                if (getattr(obj, "locked", None) is not None or n in ("locked", "door_locked")) and (
-                    self._mem_ghost or self._mem_ghost_turns > 0
-                ):
+                if (getattr(obj, "locked", None) is not None or n in ("locked", "door_locked")) and self._has_ghost_memory():
                     return True
-                if (getattr(obj, "damage", None) is not None or n == "lava") and self._mem_shield:
+                if (getattr(obj, "damage", None) is not None or n == "lava") and self._has_shield_memory():
                     return True
                 is_wall = n == "wall" or (
                     getattr(obj, "blocking", None) is not None
@@ -1903,7 +1994,7 @@ class Agent:
                     and getattr(obj, "pushable", None) is None
                     and n not in ("door", "opened", "door_open")
                 )
-                if is_wall and (self._mem_ghost or self._mem_ghost_turns > 0):
+                if is_wall and self._has_ghost_memory():
                     return True
         except Exception:
             return False
@@ -2367,10 +2458,11 @@ class Agent:
         agent_pos: Optional[Tuple[int, int]] = None
         label_counts: Dict[str, int] = {}
 
+        labels = self._classify_tiles_batch(img, grid_w, grid_h, tile_h, tile_w)
         for y in range(grid_h):
             for x in range(grid_w):
                 tile = img[y * tile_h : (y + 1) * tile_h, x * tile_w : (x + 1) * tile_w]
-                label = self._classify_tile(tile, tile_h, tile_w)
+                label = labels[y][x]
                 if label is None:
                     label = self._heuristic_tile(tile)
                 label = self._temporal_smooth_label(x, y, label)
@@ -2873,6 +2965,15 @@ class Agent:
             x_idx = (np.linspace(0, img.shape[1] - 1, w)).astype(int)
             return img[y_idx][:, x_idx]
 
+    def _resize_rgb_nearest(self, rgb: "np.ndarray", w: int, h: int) -> "np.ndarray":
+        if np is None:
+            return rgb
+        if rgb.shape[0] == h and rgb.shape[1] == w:
+            return rgb
+        y_idx = np.linspace(0, rgb.shape[0] - 1, h).astype(int)
+        x_idx = np.linspace(0, rgb.shape[1] - 1, w).astype(int)
+        return rgb[y_idx][:, x_idx]
+
     def _normalize_vector(self, arr: "np.ndarray") -> "np.ndarray":
         vec = arr.reshape(-1).astype(np.float32)
         mu = float(np.mean(vec))
@@ -3015,23 +3116,114 @@ class Agent:
         self._template_cache[key] = out
         return out
 
-    def _classify_tile(self, tile_img: "np.ndarray", tile_h: int, tile_w: int) -> Optional[str]:
+    def _tile_cache_key(self, tile_img: "np.ndarray") -> Optional[bytes]:
         if np is None:
             return None
-        key = tile_img.tobytes()
-        if key in self._tile_cache:
-            return self._tile_cache[key]
+        arr = np.asarray(tile_img)
+        if arr.ndim != 3 or arr.shape[2] < 3:
+            return None
+        rgb = arr[..., :3].astype(np.uint8, copy=False)
+        small = self._resize_rgb_nearest(rgb, self._tile_hash_size, self._tile_hash_size).astype(np.float32)
+        mean_intensity = max(1.0, float(np.mean(small)))
+        normalized = np.clip(small / mean_intensity, 0.0, 4.0)
+        quant = np.clip(
+            np.rint(normalized * ((self._tile_hash_levels - 1) / 4.0)),
+            0,
+            self._tile_hash_levels - 1,
+        ).astype(np.uint8)
+        mean_rgb = small.mean(axis=(0, 1))
+        color_sum = float(np.sum(mean_rgb))
+        if color_sum > 1e-6:
+            color_bins = np.clip(np.rint(15.0 * mean_rgb / color_sum), 0, 15).astype(np.uint8)
+        else:
+            color_bins = np.zeros(3, dtype=np.uint8)
+        gray = self._gray_image(small)
+        contrast_bin = np.uint8(min(15, max(0, int(round(float(np.std(gray)) / 8.0)))))
+        return bytes(color_bins.tolist() + [int(contrast_bin)]) + quant.tobytes()
 
-        bank = self._build_templates(tile_h, tile_w)
+    def _tile_cache_get(self, cache_key: Optional[bytes]) -> Tuple[bool, Optional[str]]:
+        if cache_key is None or cache_key not in self._tile_cache:
+            return False, None
+        label = self._tile_cache.pop(cache_key)
+        self._tile_cache[cache_key] = label
+        return True, label
+
+    def _tile_cache_put(self, cache_key: Optional[bytes], label: Optional[str]) -> None:
+        if cache_key is None:
+            return
+        if cache_key in self._tile_cache:
+            self._tile_cache.pop(cache_key)
+        self._tile_cache[cache_key] = label
+        while len(self._tile_cache) > self._tile_cache_max_size:
+            self._tile_cache.popitem(last=False)
+
+    def _should_call_ml_for_tile(
+        self,
+        template_label: Optional[str],
+        best_label: Optional[str],
+        best_score: float,
+        second: float,
+    ) -> bool:
+        if not (self._use_ml and self._ml_model is not None and self._ml_labels):
+            return False
+        if template_label is None or best_label is None:
+            return True
+        thr = self._template_thresholds.get(best_label, 0.10)
+        margin_ok = second < float("inf") and best_score * 1.18 < second
+        very_strong = best_score <= thr * 0.72
+        strong = very_strong or (margin_ok and best_score <= thr * 1.08)
+        if template_label in ("floor", "wall", "lava"):
+            return not (strong or best_score <= thr * 0.90)
+        if template_label in ("exit", "door_locked", "door_open"):
+            return not (very_strong or (margin_ok and best_score <= thr * 0.92))
+        if template_label in self._ml_critical_labels:
+            return not very_strong
+        return not strong
+
+    def _prefilter_tile_classification(
+        self,
+        tile_img: "np.ndarray",
+        tile_h: int,
+        tile_w: int,
+        bank: Optional[Dict[str, Dict[str, "np.ndarray"]]] = None,
+    ) -> Dict[str, object]:
+        if np is None:
+            return {
+                "template_label": None,
+                "best_label": None,
+                "best_score": float("inf"),
+                "second": float("inf"),
+                "label_scores": {},
+                "needs_ml": False,
+                "desc": None,
+                "bank": {},
+            }
+        if bank is None:
+            bank = self._build_templates(tile_h, tile_w)
         if not bank:
-            ml_out = self._classify_tile_ml(tile_img)
-            self._tile_cache[key] = ml_out
-            return ml_out
+            return {
+                "template_label": None,
+                "best_label": None,
+                "best_score": float("inf"),
+                "second": float("inf"),
+                "label_scores": {},
+                "needs_ml": self._use_ml and self._ml_model is not None and bool(self._ml_labels),
+                "desc": None,
+                "bank": bank,
+            }
 
         rgba = tile_img
         if rgba.ndim != 3:
-            self._tile_cache[key] = None
-            return None
+            return {
+                "template_label": None,
+                "best_label": None,
+                "best_score": float("inf"),
+                "second": float("inf"),
+                "label_scores": {},
+                "needs_ml": False,
+                "desc": None,
+                "bank": bank,
+            }
         if rgba.shape[2] == 3:
             alpha = np.full((*rgba.shape[:2], 1), 255, dtype=rgba.dtype)
             rgba = np.concatenate([rgba, alpha], axis=2)
@@ -3053,25 +3245,9 @@ class Agent:
             elif raw_score < second:
                 second = raw_score
 
-        thresholds = {
-            "floor": 0.030,
-            "wall": 0.040,
-            "lava": 0.045,
-            "agent": 0.110,
-            "gem": 0.095,
-            "coin": 0.095,
-            "key": 0.105,
-            "boots": 0.105,
-            "ghost": 0.105,
-            "shield": 0.105,
-            "box": 0.100,
-            "door_locked": 0.115,
-            "door_open": 0.115,
-            "exit": 0.120,
-        }
         out = None
         if best_label is not None:
-            thr = thresholds.get(best_label, 0.10)
+            thr = self._template_thresholds.get(best_label, 0.10)
             if best_score <= thr:
                 out = best_label
             elif best_label in ("agent", "exit", "door_locked", "door_open"):
@@ -3086,21 +3262,40 @@ class Agent:
                 if floor_score >= 0.020 and exit_score <= floor_score * 1.16 and exit_score <= 0.050:
                     out = "exit"
 
-        ml_label, ml_conf = self._classify_tile_ml_with_conf(tile_img)
-        critical = {"key", "door_open", "shield", "ghost", "boots", "gem"}
+        return {
+            "template_label": out,
+            "best_label": best_label,
+            "best_score": best_score,
+            "second": second,
+            "label_scores": label_scores,
+            "needs_ml": self._should_call_ml_for_tile(out, best_label, best_score, second),
+            "desc": desc,
+            "bank": bank,
+        }
 
-        # When raw template matching is uncertain, use the more appearance-invariant
-        # descriptor only if it agrees with ML or cleanly beats the alternatives.
+    def _resolve_tile_label(
+        self,
+        prefilter: Dict[str, object],
+        ml_label: Optional[str],
+        ml_conf: Optional[float],
+    ) -> Optional[str]:
+        out = prefilter.get("template_label")
+        best_label = prefilter.get("best_label")
+        best_score = float(prefilter.get("best_score", float("inf")))
+        label_scores = prefilter.get("label_scores") or {}
+        desc = prefilter.get("desc")
+        bank = prefilter.get("bank") or {}
+
         need_robust_assist = False
         if out is None and best_label is not None:
-            raw_thr = thresholds.get(best_label, 0.10)
+            raw_thr = self._template_thresholds.get(str(best_label), 0.10)
             close_to_known = best_score <= raw_thr * 1.6
             likely_ambiguous = (
                 best_label in ("floor", "wall", "lava", "exit", "door_locked", "door_open")
-                or ml_label in critical
+                or ml_label in self._ml_critical_labels
                 or ml_label == "exit"
             )
-            need_robust_assist = close_to_known and likely_ambiguous
+            need_robust_assist = close_to_known and likely_ambiguous and desc is not None and bool(bank)
 
         if need_robust_assist:
             candidate_labels = sorted(label_scores, key=label_scores.get)[:4]
@@ -3128,57 +3323,121 @@ class Agent:
                 robust_margin_ok = robust_best_score + 0.015 <= robust_second
                 if ml_label is not None and robust_best_label == ml_label and robust_margin_ok:
                     out = robust_best_label
-                elif best_label in ("floor", "wall", "lava") and robust_best_label in critical and robust_margin_ok:
+                elif best_label in ("floor", "wall", "lava") and robust_best_label in self._ml_critical_labels and robust_margin_ok:
                     out = robust_best_label
                 elif best_label in ("floor", "wall") and robust_best_label == "exit" and robust_margin_ok:
                     out = "exit"
 
-        # If ML is very confident on mechanics-critical classes, let it override template.
-        if ml_label in critical and ml_conf is not None:
+        if ml_label in self._ml_critical_labels and ml_conf is not None:
             need = self._ml_class_thresholds.get(ml_label, self._ml_confidence_threshold)
             if ml_conf >= need + 0.08:
                 out = ml_label
 
-        # Otherwise keep template-first. Avoid ML fallback for background classes,
-        # so heuristics can still recover exits when template matching is ambiguous.
-        if out is None:
-            if ml_label not in ("floor", "wall", "lava"):
-                out = ml_label
-        self._tile_cache[key] = out
+        if out is None and ml_label not in ("floor", "wall", "lava"):
+            out = ml_label
+        return out
+
+    def _classify_tiles_batch(
+        self,
+        img: "np.ndarray",
+        grid_w: int,
+        grid_h: int,
+        tile_h: int,
+        tile_w: int,
+    ) -> List[List[Optional[str]]]:
+        labels: List[List[Optional[str]]] = [[None for _ in range(grid_w)] for _ in range(grid_h)]
+        bank = self._build_templates(tile_h, tile_w)
+        pending: List[Tuple[int, int, Optional[bytes], Dict[str, object], "np.ndarray"]] = []
+
+        for y in range(grid_h):
+            for x in range(grid_w):
+                tile = img[y * tile_h : (y + 1) * tile_h, x * tile_w : (x + 1) * tile_w]
+                cache_key = self._tile_cache_key(tile)
+                hit, cached = self._tile_cache_get(cache_key)
+                if hit:
+                    labels[y][x] = cached
+                    continue
+
+                prefilter = self._prefilter_tile_classification(tile, tile_h, tile_w, bank)
+                if not bool(prefilter.get("needs_ml")):
+                    label = self._resolve_tile_label(prefilter, None, None)
+                    labels[y][x] = label
+                    self._tile_cache_put(cache_key, label)
+                    continue
+
+                pending.append((x, y, cache_key, prefilter, tile))
+
+        ml_results = self._ml_batch_predict([tile for _, _, _, _, tile in pending])
+        for idx, (x, y, cache_key, prefilter, _) in enumerate(pending):
+            ml_label, ml_conf = ml_results[idx] if idx < len(ml_results) else (None, None)
+            label = self._resolve_tile_label(prefilter, ml_label, ml_conf)
+            labels[y][x] = label
+            self._tile_cache_put(cache_key, label)
+        return labels
+
+    def _classify_tile(self, tile_img: "np.ndarray", tile_h: int, tile_w: int) -> Optional[str]:
+        if np is None:
+            return None
+        cache_key = self._tile_cache_key(tile_img)
+        hit, cached = self._tile_cache_get(cache_key)
+        if hit:
+            return cached
+
+        bank = self._build_templates(tile_h, tile_w)
+        prefilter = self._prefilter_tile_classification(tile_img, tile_h, tile_w, bank)
+        ml_label = None
+        ml_conf = None
+        if bool(prefilter.get("needs_ml")):
+            ml_label, ml_conf = self._classify_tile_ml_with_conf(tile_img)
+        out = self._resolve_tile_label(prefilter, ml_label, ml_conf)
+        self._tile_cache_put(cache_key, out)
         return out
 
     def _classify_tile_ml(self, tile_img: "np.ndarray") -> Optional[str]:
         out, _ = self._classify_tile_ml_with_conf(tile_img)
         return out
 
-    def _classify_tile_ml_with_conf(self, tile_img: "np.ndarray") -> Tuple[Optional[str], Optional[float]]:
-        if np is None or torch is None or self._ml_model is None or not self._ml_labels:
-            return None, None
-        arr = tile_img
-        if arr.ndim != 3 or arr.shape[2] < 3:
-            return None, None
+    def _ml_batch_predict(self, tiles: List["np.ndarray"]) -> List[Tuple[Optional[str], Optional[float]]]:
+        if np is None or torch is None or self._ml_model is None or not self._ml_labels or not tiles:
+            return [(None, None) for _ in tiles]
+        batch = []
+        for tile_img in tiles:
+            arr = np.asarray(tile_img)
+            if arr.ndim != 3 or arr.shape[2] < 3:
+                batch.append(None)
+                continue
+            rgb = arr[..., :3].astype(np.uint8, copy=False)
+            resized = self._resize_rgb_nearest(rgb, self._ml_image_size, self._ml_image_size)
+            batch.append(resized.astype(np.float32) / 255.0)
+        valid = [(idx, item) for idx, item in enumerate(batch) if item is not None]
+        results: List[Tuple[Optional[str], Optional[float]]] = [(None, None) for _ in tiles]
+        if not valid:
+            return results
         try:
-            from PIL import Image
-
-            rgb = arr[..., :3].astype(np.uint8)
-            im = Image.fromarray(rgb).resize((self._ml_image_size, self._ml_image_size), resample=Image.NEAREST)
-            x = np.asarray(im, dtype=np.float32) / 255.0
-            ten = torch.from_numpy(x).permute(2, 0, 1).unsqueeze(0)
+            x = np.stack([item for _, item in valid], axis=0)
+            ten = torch.from_numpy(x).permute(0, 3, 1, 2)
             with torch.no_grad():
                 logits = self._ml_model(ten)
                 probs = torch.softmax(logits, dim=1)
-                conf, idx = torch.max(probs, dim=1)
-            c = float(conf.item())
-            i = int(idx.item())
-            if i < 0 or i >= len(self._ml_labels):
-                return None, None
-            label = self._ml_labels[i]
-            min_conf = self._ml_class_thresholds.get(label, self._ml_confidence_threshold)
-            if c < min_conf:
-                return None, c
-            return label, c
+                confs, idxs = torch.max(probs, dim=1)
+            for (slot, _), conf, idx in zip(valid, confs.tolist(), idxs.tolist()):
+                i = int(idx)
+                c = float(conf)
+                if i < 0 or i >= len(self._ml_labels):
+                    continue
+                label = self._ml_labels[i]
+                min_conf = self._ml_class_thresholds.get(label, self._ml_confidence_threshold)
+                if c < min_conf:
+                    results[slot] = (None, c)
+                else:
+                    results[slot] = (label, c)
         except Exception:
-            return None, None
+            return [(None, None) for _ in tiles]
+        return results
+
+    def _classify_tile_ml_with_conf(self, tile_img: "np.ndarray") -> Tuple[Optional[str], Optional[float]]:
+        results = self._ml_batch_predict([tile_img])
+        return results[0] if results else (None, None)
 
     def _debug_local_ml_conf(self, image, grid_state: Optional[GridState]) -> List[Dict]:
         if not self._debug:

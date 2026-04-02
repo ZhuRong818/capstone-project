@@ -20,6 +20,9 @@ class Agent:
         self._planned_actions: List[Action] = []
         self._boss_plan_ready = False
         self._boss_state_to_action: Dict[Tuple, Action] = {}
+        self._boss_last_signature: Optional[Tuple] = None
+        self._boss_signature_streak: int = 0
+        self._boss_signature_confirm_steps: int = 2
         self._boss_actions: List[Action] = [
             Action.RIGHT,
             Action.RIGHT,
@@ -154,12 +157,7 @@ class Agent:
                 return False
         except Exception:
             return False
-        if self._matches_intro_boss_layout(
-            width,
-            height,
-            self._collect_named_positions(grid_state, "exit"),
-            self._collect_named_positions(grid_state, "lava"),
-        ):
+        if self._is_known_intro_boss_state(grid_state):
             return False
         cells = width * height
         if cells > 36:
@@ -525,12 +523,7 @@ class Agent:
         if agent_pos is None:
             return None
 
-        is_intro_boss = self._matches_intro_boss_layout(
-            width,
-            height,
-            exits,
-            lava,
-        )
+        is_intro_boss = self._is_known_intro_boss_state(grid_state)
 
         lava_budget = self._lava_cross_budget(grid_state)
 
@@ -1097,21 +1090,27 @@ class Agent:
             width = int(getattr(grid_state, "width", 0))
             height = int(getattr(grid_state, "height", 0))
         except Exception:
+            self._clear_boss_signature_memory()
             return None
 
-        if not self._matches_intro_boss_layout(
-            width,
-            height,
-            self._collect_named_positions(grid_state, "exit"),
-            self._collect_named_positions(grid_state, "lava"),
-        ):
+        sig, act = self._lookup_boss_action(grid_state)
+        if sig is None or act is None:
+            self._clear_boss_signature_memory()
             return None
 
-        self._ensure_boss_plan_ready()
-        sig = self._intro_boss_signature(grid_state)
-        if sig is None:
+        if sig == self._boss_last_signature:
+            self._boss_signature_streak += 1
+        else:
+            self._boss_last_signature = sig
+            self._boss_signature_streak = 1
+
+        exits = self._collect_named_positions(grid_state, "exit")
+        lava = self._collect_named_positions(grid_state, "lava")
+        layout_match = self._matches_intro_boss_layout(width, height, exits, lava)
+        needed = 1 if layout_match else self._boss_signature_confirm_steps
+        if self._boss_signature_streak < needed:
             return None
-        return self._boss_state_to_action.get(sig)
+        return act
 
     def _ensure_boss_plan_ready(self) -> None:
         if self._boss_plan_ready:
@@ -1129,6 +1128,21 @@ class Agent:
                 state = grid_step(state, action)
         except Exception:
             self._boss_state_to_action.clear()
+
+    def _lookup_boss_action(self, grid_state: GridState) -> Tuple[Optional[Tuple], Optional[Action]]:
+        self._ensure_boss_plan_ready()
+        sig = self._intro_boss_signature(grid_state)
+        if sig is None:
+            return None, None
+        return sig, self._boss_state_to_action.get(sig)
+
+    def _is_known_intro_boss_state(self, grid_state: GridState) -> bool:
+        _, act = self._lookup_boss_action(grid_state)
+        return act is not None
+
+    def _clear_boss_signature_memory(self) -> None:
+        self._boss_last_signature = None
+        self._boss_signature_streak = 0
 
     def _intro_boss_signature(self, grid_state: GridState) -> Optional[Tuple]:
         try:
@@ -1867,6 +1881,8 @@ class Agent:
         )
 
     def _should_skip_intro_boss_pickup(self, grid_state: GridState, pos: Tuple[int, int]) -> bool:
+        if not self._is_known_intro_boss_state(grid_state):
+            return False
         try:
             width = int(getattr(grid_state, "width", 0))
             height = int(getattr(grid_state, "height", 0))
@@ -2038,6 +2054,7 @@ class Agent:
         self._mem_keys = 0
         self._mem_ghost = False
         self._mem_ghost_turns = 0
+        self._clear_boss_signature_memory()
 
     def _activate_ghost_memory(self) -> None:
         self._mem_ghost = True

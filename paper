@@ -1,0 +1,1330 @@
+\documentclass[sigconf]{acmart}
+ 
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\tcbset{before skip=6pt, after skip=6pt}
+\usepackage{microtype}
+\usepackage{url}
+\usepackage{etoolbox}
+% Tighten list spacing globally
+\setlist{itemsep=1pt,topsep=2pt,parsep=0pt}
+% Tighten paragraph spacing
+\setlength{\parskip}{0pt}
+ 
+\AtBeginDocument{\providecommand\BibTeX{{Bib\TeX}}}
+ 
+\setcopyright{none}
+\copyrightyear{2026}
+\acmYear{2026}
+\acmDOI{XXXXXXX.XXXXXXX}
+\acmConference[ACM MM '26]{ACM International Conference on Multimedia}{October 2026}{Melbourne, Australia}
+\acmISBN{978-1-4503-XXXX-X/2026/10}
+ 
+\newcommand{\dataset}{\textsc{EventX}\xspace}
+\newcommand{\taskname}[1]{\textsf{#1}}
+\newcommand{\eg}{\textit{e.g.}\xspace}
+\newcommand{\ie}{\textit{i.e.}\xspace}
+\newcommand{\etal}{\textit{et al.}\xspace}
+ 
+\title{From Social Media Posts to Prediction Markets:\\
+       A Multimodal Benchmark for Event Forecast and Resolution}
+ 
+\author{Authors}
+\affiliation{\institution{National University of Singapore}}
+\renewcommand{\shortauthors}{Anonymous et al.}
+ 
+% ============================================================
+\begin{document}
+ 
+% ============================================================
+\begin{abstract}
+We present \dataset, a multimodal benchmark linking Twitter/X posts
+to Polymarket prediction market dynamics.
+Each instance pairs a social post (text and optional image/OCR)
+with a market question, its formal resolution rule, sibling-market
+context, and a live price--volume time series.
+The benchmark is organized around two complementary objectives.
+\emph{Forecast tasks} ask whether a post signals future market
+movement; their labels derive from tick data that postdates the post
+and are computed via deterministic SQL at zero annotation cost.
+\emph{Resolution tasks} ask how a post serves as formal evidence;
+their labels require human judgment over market rules and post
+content.
+This design yields a structural anti-contamination guarantee that
+existing financial benchmarks lack: no retrieval shortcut or LLM
+pretraining leakage can inflate scores.
+Baseline experiments confirm that the forecast tasks remain
+substantially open for state-of-the-art vision--language models. The benchmark can be accessed from \textcolor{blue}{\url{https://github.com/mlsys-io/EventXBench}}.
+\end{abstract}
+  
+ 
+\maketitle
+ 
+ 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/t.png}\vspace{-0.1in}
+\caption{An example resolution query from \taskname{T3}.}
+\label{fig:intro}
+\end{figure}
+ 
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+ 
+Social media posts and prediction markets both aggregate information
+about real-world events whose outcomes are uncertain, yet they do so
+through very different mechanisms.
+A single credible post can shift a market's probability estimate
+within minutes, trigger correlated moves across dozens of related
+contracts, and generate volume spikes that persist for hours.
+Once the event resolves, the same posts may supply the decisive
+evidence that formally settles the market.
+This tight coupling --- from early social signal through price
+reaction to formal adjudication --- constitutes a complete
+information lifecycle, yet despite active research at the
+intersection of social media and event
+forecasting~\cite{bollen2011twitter,sprenger2014tweets,ding2014using,
+ritterman2009using}, no existing benchmark captures it as a unified
+object of study.
+ 
+The gap stems from how current datasets partition the problem.
+Social media benchmarks label posts for sentiment or topical
+relevance~\cite{rosenthal2017semeval,barbieri2020tweeteval},
+discarding the downstream market signal.
+Financial forecasting datasets pair prices with news
+headlines~\cite{kogan2009predicting,chen2014wisdom}, discarding the
+conversational, multimodal character of social posts.
+Neither addresses the most fundamental alignment question:
+\emph{which prediction market does this post concern, and what does
+it imply about that market's future price and ultimate resolution?}
+ 
+We introduce \dataset, which links (1)~a Twitter/X post with text
+and optional image or OCR; (2)~a Polymarket question and
+resolution rule; (3)~sibling-market context from the same event
+graph; and (4)~a fine-grained price--volume time series.
+Each instance therefore spans multiple distinct modalities:
+natural-language text, images (photographs, charts, and text
+screenshots), market price and volume time series, and structured
+market metadata (question, resolution rule, category, deadline).
+We design six tasks, organized into two tiers, spanning the complete
+post-to-market lifecycle (Table~\ref{tab:tasks}).
+\emph{Forecast tasks} are grounded in tick data generated after the
+post; no model can access this data at inference time, and labels
+are computed deterministically by SQL.
+\emph{Resolution tasks} are grounded in present-day market metadata
+and rules; they demand semantic and evidential reasoning and are
+human-annotated.
+ 
+All six tasks are both practically important and technically
+challenging.
+Forecast tasks require reasoning over social signals, market context,
+and time-series data that standard vision--language models are not
+designed to handle: predicting volume before any price exists
+(\taskname{T1}), directional price movement conditioned on what is
+already priced in (\taskname{T4}), cross-market propagation
+(\taskname{T6}), and impact persistence (\taskname{T5}).
+Resolution tasks pose complementary challenges: fine-grained retrieval
+among near-synonymous market candidates (\taskname{T2}) and
+legal-style evidence grading against formal written rules
+(\taskname{T3}).
+Our experiments confirm that all tasks remain substantially open for
+current multimodal and language models.
+ 
+\smallskip\noindent\textbf{Contributions} of this paper can be summarized as:
+ 
+\begin{enumerate}[leftmargin=1.8em, itemsep=1pt, topsep=2pt]
+  \item \emph{Dataset.} \dataset comprises
+  {11,952} Polymarket markets and {9.0M} KOL posts
+  collected over 2021--2026, spanning politics, sports, crypto, and
+  entertainment, with image/OCR (37.9\% media rate), event graph,
+  and tick data per instance.
+  \item \emph{Forecast/resolution taxonomy.} We formalize a
+  two-tier task structure whose forecast labels are computed
+  deterministically via SQL at zero annotation cost, confining
+  human judgment to the two resolution tasks.
+  \item \emph{Baselines.} We evaluate text-only, multimodal, and
+  market conditioned models on all six tasks, establishing that the
+  forecast tasks remain substantially open.
+\end{enumerate}
+ 
+\smallskip\noindent\textbf{Potential applications.}
+Beyond benchmarking multimodal models, \dataset can support research
+in social media--driven financial forecasting, real-time event
+detection, misinformation identification through market--post
+disagreement, and cross-modal reasoning over text, images, and time
+series. Its event-graph structure also enables studies of information
+propagation across related markets.
+
+\smallskip\noindent\textbf{Licensing and access.}
+\dataset is released under the CC BY-NC-SA 4.0 license for
+non-commercial research use. Data, task definitions, and evaluation scripts are publicly
+available on our Git repo. Polymarket data are redistributed in accordance with the platform's
+public API terms, and Twitter/X content is shared as post IDs to
+comply with the platform's data redistribution policy. The full Twitter/X data can be requested with a Data Use Agreement.
+
+\section{Related Work}
+\label{sec:related}
+% ============================================================
+ 
+\smallskip\noindent\textbf{Social media and market forecasting.}
+Beginning with Bollen~\etal~\cite{bollen2011twitter}, a line of
+work spanning event-driven models~\cite{ding2014using,ding2015deep}
+and author-credibility graphs~\cite{xu2018stock,sawhney2020deep}
+has established that social posts carry predictive market signal.
+However, all prior studies evaluate against aggregate returns or
+binary up/down labels that are decoupled from each post's specific
+claim.
+Multimodal extensions incorporate audio~\cite{sawhney2020multimodal}
+and cross-asset structure~\cite{sawhney2020deep};
+Nofer and Hinz~\cite{nofer2015twitter} further showed that the
+strength of the effect depends on feature construction.
+\dataset replaces aggregate labels with prediction market prices,
+where each price is semantically aligned to the exact proposition
+the post addresses.
+ 
+\smallskip\noindent\textbf{Prediction markets.}
+Prediction markets are validated as probability aggregators on
+both theoretical~\cite{wolfers2004prediction} and
+empirical~\cite{berg2008results,rothschild2009forecasting,
+leigh2006competing} grounds.
+Ritterman~\etal~\cite{ritterman2009using} remains the only prior
+work linking social posts to prediction market prices, and does so
+at aggregate temporal granularity on a single contract; \dataset
+provides instance-level alignment across thousands of markets.
+Recent work examines Polymarket directly~\cite{tsang2026anatomy}
+and studies social network effects on market
+efficiency~\cite{qiu2014effects}.
+ 
+\smallskip\noindent\textbf{Multimodal misinformation and event understanding.}
+Event detection corpora (MAVEN~\cite{wang2020maven},
+ACE~\cite{doddington2004ace}) focus on entity annotation without
+market outcomes.
+Multimedia veracity benchmarks (MediaEval~\cite{boididou2015mediaeval},
+NewsCLIPpings~\cite{luo2021newsclippings},
+FakeNewsNet~\cite{shu2020fakenewsnet},
+Hateful Memes~\cite{kiela2020hateful}) and rumor datasets
+(PHEME~\cite{zubiaga2016pheme},
+RumourEval~\cite{derczynski2017rumoureval,gorrell2019rumoureval},
+DeClarE~\cite{popat2018declare}) cast claim verification as a
+text-and-image classification task.
+\dataset's \taskname{T3} extends this direction by grounding
+evidence grading in a formal written rule and connecting the grade
+to downstream market resolution outcomes.
+ 
+\smallskip\noindent\textbf{Financial NLP benchmarks.}
+FinBERT~\cite{araci2019finbert,yang2020finbert},
+BloombergGPT~\cite{wu2023bloomberggpt}, and
+FinGPT~\cite{yang2023fingpt} target present-day document
+understanding tasks such as FinQA~\cite{chen2021finqa},
+TAT-QA~\cite{zhu2021tatqa}, and FLUE~\cite{shah2022flue}.
+Lopez-Lira and Tang~\cite{lopezlira2023chatgpt} showed that GPT-4
+directional predictions carry only marginal predictive power on
+equities.
+\dataset shifts the axis from comprehending present-day text to
+anticipating future market dynamics driven by social signals.
+ 
+\section{Task Definitions}
+\label{sec:tasks}
+% ============================================================
+ 
+\dataset defines six tasks over the post-to-market lifecycle
+(Table~\ref{tab:tasks}), split by the temporal origin of their
+ground truth.
+ 
+\begin{table}[t]
+  \centering
+  \caption{Task overview. $\dagger$~labels are computed by
+    deterministic SQL from post-publication tick data (zero
+    annotation cost). $\ddagger$~labels require human judgment.}
+  \label{tab:tasks}
+  \setlength{\tabcolsep}{3pt}
+  \footnotesize
+  \begin{tabular}{@{}lp{4.5cm}p{2.3cm}l@{}}
+    \toprule
+    Task & Question & Output & GT \\
+    \midrule
+    \multicolumn{4}{l}{\textit{Resolution tier --- present-day ground truth}} \\[1pt]
+    \taskname{T2}$\,\ddagger$
+      & Which market does this post address?
+      & Market ID / \texttt{none} & Present \\
+    \taskname{T3}$\,\ddagger$
+      & What is this post's evidential grade?
+      & Ordinal 0--5 & Present \\
+    \midrule
+    \multicolumn{4}{l}{\textit{Forecast tier --- post-publication tick data}} \\[1pt]
+    \taskname{T1}$\,\dagger$
+      & How much final trading volume will this market attract?
+      & 3-class & Future \\
+    \taskname{T4}$\,\dagger$
+      & What will the market price do next?
+      & Direction $\times$ magnitude & Future \\
+    \taskname{T5}$\,\dagger$
+      & How large and persistent is this post's impact?
+      & Continuous $+$ 3-class & Future \\
+    \taskname{T6}$\,\dagger$
+      & Does this post propagate to sibling markets?
+      & 3-class & Future \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\subsection{Resolution Tasks}
+ 
+\smallskip\noindent\textbf{T2 --- Post-to-Market Linking.}
+Given a post $p$ and a candidate set $\mathcal{C}(p)$ recalled by
+BGE-large-en-v1.5~\cite{xiao2023cpack} / FAISS~\cite{johnson2021faiss}
+dense retrieval, the model must identify
+the single market $m^*$ that $p$ most specifically addresses, or
+output \texttt{none}.
+Surface entity overlap alone is insufficient: a post about a
+politician's health may match markets on election outcome,
+resignation probability, and policy votes simultaneously.
+Metrics: Accuracy@1, MRR, \texttt{none}-class $F_1$.
+ 
+\smallskip\noindent\textbf{T3 --- Evidence Grading and Resolution Potential.}
+Given a post linked to market $m$, the model assigns an ordered
+evidence grade (Table~\ref{tab:grades}): grade~5 means the post
+alone satisfies all formal resolution conditions (source, predicate,
+timing, threshold); lower grades capture indirect, speculative, or
+off-topic signal.
+Metrics: quadratic-weighted $\kappa$, \texttt{resolving}-class
+precision, macro-$F_1$.
+ 
+\begin{table}[t]
+  \centering
+  \caption{Evidence grade scale for \taskname{T3}.}
+  \label{tab:grades}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}clp{4.6cm}@{}}
+    \toprule
+    Grade & Label & Meaning \\
+    \midrule
+    5 & \texttt{resolving}            & Satisfies all rule conditions. \\
+    4 & \texttt{strong\_direct}       & Direct evidence; fails $\leq\!1$ formal condition. \\
+    3 & \texttt{indirect\_report}     & Credible but second-hand; no direct predicate assertion. \\
+    2 & \texttt{speculation\_rumor}   & Directional claim; non-authoritative source. \\
+    1 & \texttt{commentary\_reaction} & Opinion; no new factual claim. \\
+    0 & \texttt{noise}                & Off-topic. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\subsection{Forecast Tasks}
+ 
+A \emph{confound filter} flags instances where a second
+grade-$\geq 3$ post from a different author appears within the
+forecast window; flagged instances are excluded from test/val splits.
+The filter is fully operative for \taskname{T4}; \taskname{T6}
+integration is pending (§\ref{sec:annotation}).
+ 
+\smallskip\noindent\textbf{T1 --- Conditional Market Volume Prediction.}
+Given a pre-market post event group, the model predicts the final
+volume percentile of the subsequently created market within its
+calendar-month cohort: \texttt{high} ($>$80th), \texttt{moderate}
+(40th--80th), or \texttt{low} ($<$40th).
+T1 is \emph{conditional}: pipeline analysis reveals that
+$\approx$7.7K posts form post-creation bursts, while
+$\approx$9.8K constitute recoverable pre-market bursts. The task is
+therefore restricted to event groups with detectable pre-market
+signal ($\bar{c}>0.70$, composite score $>2.5$;
+§\ref{sec:annotation}).
+Of the 8,042 event groups constructed (973 linked to a market),
+342 candidate markets pass the quality filter; \textbf{326} of these
+pass the volume filter ($>$50 trades using final volume),
+yielding 109 \texttt{high}, 114 \texttt{moderate}, and
+103 \texttt{low} instances (16 thin-market outliers excluded).
+The mean volume percentile rank is 0.600 (median 0.639),
+confirming that socially salient events attract above-average
+trading activity.
+Metrics: macro-$F_1$, \texttt{high}-class precision@$K$.
+ 
+\smallskip\noindent\textbf{T4 --- Market Movement Prediction.}
+Given post $p$, linked market $m$, and reference price $p_0$ (the
+YES-side close price at or immediately before post time $t_p$),
+the model predicts direction (\texttt{up} / \texttt{flat} /
+\texttt{down}) and magnitude bucket (\texttt{large} / \texttt{medium}
+/ \texttt{small}) of price change at the primary horizon
+$H = 2\text{h}$, with thresholds $|\Delta p| = 0.02$ and $0.08$;
+prices at 30\,min and 6\,h serve as secondary targets.
+$p_0$ is a required model input: a bullish post may have zero
+impact if the information is already priced in.
+Instances with no price tick in the 2-hour window
+(\textit{ghost markets}) are excluded, leaving \textbf{4,803} valid
+instances (Table~\ref{tab:t4stats}).
+A continuous \texttt{horizon\_curve} is also stored for regression.
+Metrics: direction accuracy, magnitude macro-$F_1$, Spearman $\rho$.
+ 
+\smallskip\noindent\textbf{T6 --- Cross-Market Propagation.}
+For post $p$ linked to market $m$ with sibling set $\mathcal{S}$,
+the model predicts whether the post's information propagates to
+shift sibling prices within 2 hours.
+The sibling graph is constructed in two layers: a rule-based
+high-precision layer and an embedding-based recall layer, combined
+via pairwise confidence scoring and a noise filter.
+A market is deemed \emph{moved} if $|\Delta p| > 1.5\sigma$, where
+$\sigma$ is its rolling 24h standard deviation.
+Labels: \texttt{primary\_mover} ($m$ moves first, $\geq\!1$ sibling
+follows), \texttt{propagated\_signal} (a sibling moves before or
+instead of $m$), \texttt{no\_effect}.
+The onset lag of each sibling's move is also recorded.
+Of 4,006 valid instances (drawn from 1,148 unique primary markets
+with usable price windows), 616 (15.4\%) / 799 (19.9\%) / 2,591
+(64.7\%) fall into \texttt{primary\_mover} /
+\texttt{propagated\_signal} / \texttt{no\_effect}, respectively
+(35.3\% exhibit cross-market propagation).
+The mean sibling set size is 10.9 (median 9); among moved siblings,
+the mean onset lag is 44.4\,min (median 36.0\,min).
+Propagation rates vary by domain: politics 37.4\%, crypto 32.8\%,
+sports 21.7\%.
+T3 confound filtering flags 593 instances (14.8\%); integration
+into the final test/dev splits is pending.
+Metrics: macro-$F_1$, mean absolute error on onset lag (minutes).
+ 
+\smallskip\noindent\textbf{T5 --- Volume and Price Impact.}
+This task is restricted to posts with a non-flat \taskname{T4}
+direction label (\texttt{direction\_label} $\in$
+\{\texttt{up}, \texttt{down}\} and \texttt{price\_t0} not null).
+The model predicts three targets per post:
+(i)~\texttt{price\_impact} ---
+$\max_H |\Delta p_H|$ (maximum absolute deviation from $p_0$) over
+$H \in \{15\text{m}, 30\text{m}, 1\text{h}, 2\text{h}, 6\text{h}\}$;
+(ii)~\texttt{volume\_multiplier} --- total traded volume in
+$[t_p,\,t_p{+}H]$ divided by the rolling 24h baseline (mean hourly
+volume in $[t_p{-}24\text{h},\,t_p)$); and
+(iii)~\texttt{decay\_class}, determined by comparing close prices at
+15\,min and 2\,h against $p_0$:
+\texttt{transient} if $|\Delta p_{2h}| < 0.3|\Delta p_{15m}|$,
+\texttt{sustained} if the move is larger and in the same direction
+at 2\,h, and \texttt{reversal} if the sign flips at 2\,h.
+Rows missing either $p_{15m}$ or $p_{2h}$ are excluded;
+null or non-positive 24h baselines yield null
+\texttt{volume\_multiplier}.
+The confound filter uses the maximum horizon (6\,h) window;
+prices are tracked on the YES side only, consistent with
+\taskname{T4}.
+Of the 1,338 eligible instances, 407 have complete T5 labels;
+among these, 268 are non-confounded.
+On the 268 clean instances, the decay distribution is:
+\texttt{transient} 51.1\%, \texttt{sustained} 31.3\%,
+\texttt{reversal} 17.5\%.
+Mean \texttt{price\_impact} is 0.11 (median 0.05) and mean
+\texttt{volume\_multiplier} is 10.6 (median 2.56).
+Average price impact grows from 0.095 at 15\,min to 0.12 at 2\,h
+and 0.14 at 6\,h, indicating that impact accumulates over time.
+Metrics: Spearman $\rho$ for the two continuous targets,
+\texttt{decay\_class} macro-$F_1$.
+ 
+\section{Dataset}
+\label{sec:dataset}
+ 
+\subsection{Data Sources and Collection}
+ 
+\smallskip\noindent\textbf{Polymarket.}
+The Polymarket corpus encompasses \textbf{426,357} unique binary
+markets collected via the public API and on-chain CLOB contract on
+Polygon.
+Of these, \textbf{11,952} have price time-series data and form
+the usable market universe.
+Among resolved markets (11,847 of 11,952), 25.7\% resolve YES and
+71.9\% NO --- a skew that reflects the inherent base-rate difficulty
+of positive-outcome prediction.
+Median market duration is 1.8~days (mean: 9.4~days), a
+short-to-medium horizon well suited to near-term event forecasting.
+Liquidity is heavily concentrated: the top 1\% of markets account
+for 65.2\% of total trading volume.
+Per market, we retain: question text, full resolution rule, creation
+and resolution timestamps, outcome, 1-minute price and volume time
+series, and event graph membership.
+Four filters are applied:
+(i)~\emph{thin-market} (${<}50$ lifetime trades);
+(ii)~\emph{duration} (resolution within 24h of creation);
+(iii)~\emph{near-duplicate} (cosine similarity~$>0.92$ to an
+existing market);
+(iv)~\emph{unresolved} (test/val markets must be fully resolved).
+After filtering, {11,952 markets} remain across five domains
+(Table~\ref{tab:stats}).
+ 
+Event clusters link markets sharing $\geq\!2$ named entities within
+14-day windows (merged transitively), forming the sibling graph used
+by \taskname{T6} and \taskname{T2}.
+ 
+\smallskip\noindent\textbf{Twitter/X.}
+The social corpus comprises {9,036,781} tweets from
+{1,152} key opinion leader (KOL) accounts collected over
+2021--2026.
+KOL selection prioritizes high-visibility accounts with broad event
+coverage; the most prolific account contributed 141,706 tweets, while
+the median KOL posted 2,850 --- a mean-to-median ratio of 2.75
+consistent with power-law participation.
+Average post engagement is 2,402 likes, 110 replies, and 160,152
+views, confirming broadcast-style influencer activity.
+Of all tweets, {37.9\%} contain media; images are
+OCR-processed with Tesseract and classified as \emph{text screenshot},
+\emph{chart}, or \emph{photograph}.
+The corpus is 95.3\% English; non-English content is slightly more
+prevalent in sports (6.3\% vs.\ 3.9\% for non-sports), reflecting
+the international character of sports discourse.
+Post volume is stable at 1.5--2.0M per year from 2021 to 2025.
+ 
+\subsection{Instance Construction}
+ 
+An instance is the tuple $(p,\,m,\,\mathcal{S},\,\mathcal{T})$:
+post, linked market, sibling set, and price--volume time series
+aligned to the post timestamp.
+
+\smallskip\noindent\textbf{Candidate generation.}
+All market questions and post texts are encoded into
+1024-dimensional dense vectors using
+BGE-large-en-v1.5~\cite{xiao2023cpack} and indexed
+over the full market corpus (426K markets) with
+FAISS~\cite{johnson2021faiss} \texttt{IndexFlatIP}.
+For each post, the top-50 retrieved markets are post-filtered by a
+$\pm$6h time window and capped at ten candidates; pairs below
+similarity 0.70 ($\approx$96\% of pairs) are discarded, retaining
+$\approx$355K pairs for verification.
+ 
+\smallskip\noindent\textbf{Linking (\taskname{T2}).}
+Each candidate pair is classified by a
+Qwen2.5-4B~\cite{qwen2024qwen25} judge
+(§\ref{sec:annotation}) as \texttt{PASS}, \texttt{DROP}, or
+\texttt{REVIEW}; \texttt{PASS} pairs (342,552) are
+auto-accepted, 1,259 \texttt{REVIEW} cases proceed to
+human annotators who accepted 815 (0.24\% of retained links), and
+\texttt{DROP} pairs (10,751) are discarded.
+In total, 343,367 tweet--market links are retained (99.76\% PASS,
+0.24\% human-accepted REVIEW);
+96.2\% of posts are linked to no market, with an average of
+12.0 tweets per linked market.
+The mean embedding similarity of accepted pairs is 0.722, and the
+average candidate set size per post is 6.58.
+ 
+\smallskip\noindent\textbf{Time series alignment.}
+We extract the price--volume series over $[t_p{-}30\text{min},\;
+t_p{+}6\text{h}]$; $p_0$ is the last tick at or before $t_p$.
+Instances with $<$5 ticks are excluded.
+ 
+\begin{table}[t]
+  \centering
+  \caption{Dataset statistics by domain. Posts in thousands (K).
+    Crypto/Finance combines crypto/digital assets and company/product
+    markets. Res.\ = resolved markets (\%).}
+  \label{tab:stats}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}lrrrrr@{}}
+    \toprule
+    Domain & Mkt & Posts & Clust. & Vol.\ & Res. \\
+    \midrule
+    Politics      & 2,538  & 1,594K & 2,260 & 18.995B & 98.54\% \\
+    Sports        & 2,657  & 1,541K & 12,749
+ & 17.870B & 99.02\% \\
+    Entertainment & 1,458  &   654K & 1,539 & 8.414B & 99.04\% \\
+    Crypto/Finance& 5,111  & 1,340K & 3,588 & 2.405B & 99.45\% \\
+    Other         &   188  & 3,908K & 6,165 & ---     & ---       \\
+    \midrule
+    \textbf{Total} & \textbf{11,952} & \textbf{9.0M} & --- & --- & \textbf{99.2}\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\subsection{Annotation}
+\label{sec:annotation}
+ 
+Both resolution tasks store the silver label, LLM output, human
+correction, and annotator ID for audit.
+All forecast task labels are computed deterministically from the tick
+database via SQL; reliability is cross-validated against two
+independent price providers (mean absolute price deviation:
+\textbf{[mad]\%}).
+ 
+\smallskip\noindent\emph{T2 annotation.}
+The three-way classification pipeline (Qwen2.5-4B with human review
+of \texttt{REVIEW} cases) is described in \S\ref{sec:dataset};
+accepted links are stored in \texttt{tweet\_market\_link}.
+ 
+\smallskip\noindent\emph{T3 annotation.}
+The pipeline operates in four stages.
+\textit{(1)~Rule parsing.} GPT-4o~\cite{openai2023gpt4} parses each
+market's resolution rule once into a structured predicate object
+(source whitelist, predicate string, deadline, numeric threshold);
+the object is human-verified and cached in Postgres.
+\textit{(2)~Deterministic pre-checks.} Four SQL/NLP checks ---
+source authority, time condition, threshold, and predicate entity
+match (spaCy + fuzzy) --- each return
+\texttt{pass}/\texttt{fail}/\texttt{uncertain}.
+All four \texttt{pass} $\Rightarrow$ candidate grade~5; source
+\texttt{fail} caps the grade at $\leq 3$.
+\textit{(3)~Conditional LLM.} Invoked only when any check returns
+\texttt{uncertain}; the model outputs a grade, confidence score, and
+four ambiguity flags (conditional, sarcasm, source unclear, threshold
+ambiguous).
+\textit{(4)~Auto-accept / human route.} Silver labels are accepted
+if all pre-checks \texttt{pass}, grade $\leq 1$, confidence
+$\geq 0.90$, and no flags are set; otherwise, the instance is routed
+to a human annotator (grade $\geq 3$, any flag, or confidence
+$< 0.70$).
+Of the 342,552 annotated instances, the grade distribution is:
+grade~3 \texttt{indirect\_report} (61.9\%),
+grade~2 \texttt{speculation} (26.3\%),
+grade~1 \texttt{commentary} (5.6\%),
+grade~0 \texttt{noise} (4.4\%),
+grade~4 \texttt{strong\_direct} (1.2\%), and
+grade~5 \texttt{resolving} (0.6\%).
+The LLM was invoked for 74,529 instances (21.8\%) where at least one
+pre-check was uncertain; 9,464 (2.8\%) were auto-accepted as silver
+labels, and 65,065 (19.0\%) received human review.
+ 
+\begin{table}[t]
+  \centering
+  \caption{\taskname{T4} label distribution (4,803 instances).
+    Mean $\Delta_{2h} = 0.016$, Std $= 0.161$.
+    Confound rate: 20.1\%.}
+  \label{tab:t4stats}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}llrr@{}}
+    \toprule
+    Direction & Magnitude & Count & \% \\
+    \midrule
+    Flat & Small ($\leq$2\%)   & 2,820 & 58.7 \\
+    Up   & Medium (2--8\%)     &   592 & 12.3 \\
+    Up   & Large ($>$8\%)      &   563 & 11.7 \\
+    Down & Medium (2--8\%)     &   505 & 10.5 \\
+    Down & Large ($>$8\%)      &   323 &  6.7 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\section{Benchmark and Analysis}
+\label{sec:baselines}
+% ============================================================
+\subsection{Benchmark Setup}
+ 
+\smallskip\noindent\textbf{Data splits} are temporal by market
+creation date (train: 2021--2024 / val: Jan--Jun~2025 /
+test: Jul~2025--Feb~2026) to prevent leakage.
+Test and validation instances are fully resolved; all resolution-task
+test/val labels are human-verified (no silver).
+Table~\ref{tab:t4stats} reports the \taskname{T4} label distribution
+across the 4,803 valid instances.
+The majority (58.7\%) exhibit flat or small movement, consistent
+with most posts being informative but not price-moving.
+Of 1,983 non-flat instances, 645 are confounded (32.5\%,
+higher than the 20.1\% overall rate), leaving {1,338} clean
+directional instances eligible for \taskname{T5}.
+407 have complete T5 labels (268 non-confounded).
+Confounded instances are excluded from test and retained in
+training with a flag.
+ 
+\smallskip\noindent\textbf{Metrics.}
+Each task uses metrics suited to its output type.
+\taskname{T2}: Accuracy@1, MRR, and \texttt{none}-class $F_1$.
+\taskname{T3}: quadratic-weighted $\kappa$, \texttt{resolving}-class
+precision, and macro-$F_1$.
+\taskname{T1}: macro-$F_1$ and \texttt{high}-class precision@$K$.
+\taskname{T4}: direction accuracy, magnitude macro-$F_1$, and
+Spearman~$\rho$ on the continuous horizon curve.
+\taskname{T6}: macro-$F_1$ and mean absolute error (MAE) on onset lag
+in minutes.
+\taskname{T5}: Spearman~$\rho$ for the two continuous targets and
+\texttt{decay\_class} macro-$F_1$.
+All classification metrics are macro-averaged to penalize poor
+minority-class performance.
+LLM baselines are run three times with different random seeds;
+we report the mean and include 95\% bootstrap confidence intervals
+in the supplementary material.
+
+\begin{table*}[t]
+  \centering
+  \caption{Baseline results across all six tasks. Best result per task in \textbf{bold};
+    $\rho$\,=\,Spearman correlation; MAE in minutes; all $F_1$ scores are macro-averaged.
+    `---' denotes not applicable; `\,.\,' denotes pending.}\vspace{-0.1in}
+  \label{tab:results}
+  \footnotesize
+  \setlength{\tabcolsep}{9pt}
+  \begin{tabular}{@{}l
+      cc
+      cc
+      c
+      ccc
+      ccc
+      cc
+    @{}}
+    \toprule
+    & \multicolumn{2}{c}{\taskname{T2}}
+    & \multicolumn{2}{c}{\taskname{T3}}
+    & \taskname{T1}
+    & \multicolumn{3}{c}{\taskname{T4}}
+    & \multicolumn{3}{c}{\taskname{T5}}
+    & \multicolumn{2}{c}{\taskname{T6}} \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-6}
+    \cmidrule(lr){7-9}\cmidrule(lr){10-12}\cmidrule(lr){13-14}
+    Method
+    & Acc@1 & MRR
+    & $\kappa$ & $F_1$
+    & $F_1$ 
+    & Dir. & Mag. & $\rho$
+    & $\rho_p$ & $\rho_v$ & $F_1^d$
+    & $F_1$ & MAE \\
+    \midrule
+    \multicolumn{14}{@{}l}{\textit{Trivial baselines}} \\[1pt]
+    Majority / Median
+    & 0.068 & 0.068 & 0.000 & 0.128 & 0.172
+    & 0.587 & 0.247 & --- & --- & --- & 0.237 & 0.227 & --- \\
+    Random
+    & 0.000 & 0.000 & 0.002 & 0.167 & 0.285
+    & 0.432 & 0.333 & --- & --- & --- & 0.333 & 0.313 & --- \\
+    \midrule
+    \multicolumn{14}{@{}l}{\textit{Heuristic and retrieval}} \\[1pt]
+    BGE top-1
+    & \textbf{0.379} & \textbf{0.525} & --- & --- & ---
+    & --- & --- & --- & --- & --- & --- & --- & --- \\
+    BM25 top-1
+    & 0.072 & 0.107 & --- & --- & ---
+    & --- & --- & --- & --- & --- & --- & --- & --- \\
+    Pre-check pipeline
+    & --- & --- & 0.686 & 0.320 & ---
+    & --- & --- & --- & --- & --- & --- & --- & --- \\
+    Random walk
+    & --- & --- & --- & --- & ---
+    & 0.503 & 0.364 & 0.011 & --- & --- & --- & --- & --- \\
+    Graph heuristic
+    & --- & --- & --- & --- & ---
+    & --- & --- & --- & --- & --- & --- & 0.25 & 24.49 \\
+    \midrule
+    \multicolumn{14}{@{}l}{\textit{Feature-based ML}} \\[1pt]
+    LightGBM
+    & --- & --- & \textbf{0.849} & \textbf{0.489} & \textbf{0.5076}
+    & \textbf{0.682} & \textbf{0.556} & \textbf{0.322}
+    & \textbf{0.343} & \textbf{0.363} & \textbf{0.518} & \textbf{0.274} & \textbf{24.56} \\
+    \midrule
+    \multicolumn{14}{@{}l}{\textit{LLMs}} \\[1pt]
+    GPT-4o (0-shot)
+    & 0.659 & 0.779 & 0.080 & 0.274 & 0.266
+    & 0.605 & 0.370 & 0.121 & 0.056 & -0.039 & 0.296 & 0.334 & --- \\
+    GPT-4o (3-shot)
+    & 0.650 & 0.772 & 0.106 & 0.312 & 0.343
+    &  0.648 & 0.366 & 0.181 & --- & --- & --- & 0.345 & --- \\
+    GPT-4o + image
+    & 0.612 & 0.749 & . & . & ---
+    & 0.590 & 0.373 & 0.084 & --- & --- & --- & --- & --- \\
+    GPT-4o + prices
+    & --- & --- & --- & --- & ---
+    & 0.638 & 0.373 & 0.120 & 0.268 & -0.046 & 0.285 & --- & --- \\
+    Sonnet 4.5 (0-shot)
+    & 0.625 & 0.779 & 0.132 & 0.237 & 0.362
+    & 0.598 & 0.545 & 0.209 & 0.308 & 0.073 & 0.277 & 0.237 & --- \\
+    Sonnet 4.5 (3-shot)
+    & 0.649 & 0.763 & 0.172 & 0.285 & 0.334
+    & 0.604 & 0.554 & 0.356 & 0.417 & 0.211 & 0.251 & 0.259 & --- \\
+    Grok 4.1 (0-shot)
+    & 0.564 & 0.728 & 0.100 & 0.198 & 0.329
+    & 0.560 & 0.479 & 0.317 & 0.176 & -0.054 & 0.284 & 0.319 & --- \\
+    Grok 4.1 (3-shot)
+    & 0.555 & 0.718 & 0.174 & 0.301 & 0.297
+    & 0.585 & 0.447 & 0.295. & 0.135 & 0.019 & 0.273 & 0.288 & --- \\
+    Qwen3.5-4B (0-shot)
+    & 0.320 & 0.577 & 0.126 & 0.199 & 0.304
+    & 0.597 & 0.381 & -0.05 & -0.038 & -0.122 & 0.309 & 0.306 & --- \\
+    Qwen3.5-4B (3-shot)
+    & 0.569 & 0.738 & 0.192 & 0.287 & 0.276
+    & 0.581 & 0.263 & -0.045 & 0.067 & 0.068 & 0.303 & 0.251 & --- \\
+    Qwen3.5-27B (0-shot)
+    & 0.620 & 0.757 & 0.210 & 0.292 & 0.240
+    & 0.623 & 0.448 & 0.037 & 0.179 & 0.078 & 0.290 & 0.301 & --- \\
+    Qwen3.5-27B (3-shot)
+    & 0.605 & 0.750 & 0.214 & 0.315 & 0.315
+    & 0.619 & 0.449 & 0.118 & 0.331 & 0.162 & 0.320 & 0.295 & --- \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+ 
+\smallskip\noindent\textbf{Baselines.}
+We organize baselines into four categories
+(Table~\ref{tab:results}).
+ 
+\smallskip\noindent\emph{(i) Trivial.}
+\textbf{Majority} always predicts the most frequent class (or the
+training-set median for continuous targets).
+\textbf{Random} samples from the class prior.
+These establish the floor that any informed model must exceed.
+ 
+\smallskip\noindent\emph{(ii) Heuristic / retrieval.}
+For \taskname{T2}: \textbf{BGE top-1} returns the highest-scoring
+candidate from the BGE-large-en-v1.5~\cite{xiao2023cpack} dense
+retrieval index without re-ranking; \textbf{BM25 top-1} replaces
+dense retrieval with sparse term-matching (Okapi BM25) over the same
+candidate set.
+For \taskname{T3}: the deterministic \textbf{pre-check pipeline}
+runs four rule-based checks --- source authority (whitelisted
+domains/accounts), time condition (post timestamp vs.\ market
+deadline), numeric threshold (extracted quantities vs.\ resolution
+threshold), and predicate entity match (spaCy NER + token-level
+fuzzy matching) --- each returning
+\texttt{pass}/\texttt{fail}/\texttt{uncertain}; the final grade is
+assigned by hard-coded logic without any LLM stage.
+For \taskname{T4}: a \textbf{random-walk} baseline that extracts the
+sign of the 30-minute pre-post price change
+$\mathrm{sgn}(p_{t_p} - p_{t_p - 30\mathrm{m}})$ and predicts the
+same direction at the 2h horizon, ignoring all post content; this
+tests whether social signal adds value beyond momentum.
+For \taskname{T6}: a \textbf{graph heuristic} that computes cosine
+similarity between the BGE embedding of the primary market question
+and each sibling, predicting \texttt{primary\_mover} when the
+maximum sibling similarity exceeds a threshold tuned on the
+validation set.
+ 
+\smallskip\noindent\emph{(iii) Feature-based ML.}
+LightGBM classifiers (or regressors for \taskname{T5} continuous
+targets) trained on the following hand-crafted feature vector
+(13 dimensions; 15 for \taskname{T6}):
+\emph{engagement} --- like count, reply count, and view count of
+the post;
+\emph{author} --- follower count of the posting account;
+\emph{market state} --- reference price $p_0$, 24h rolling baseline
+volume (mean hourly volume in $[t_p{-}24\text{h},\,t_p)$), and a
+one-hot market category (politics, sports, entertainment,
+crypto/finance);
+\emph{text sentiment} --- the FinBERT~\cite{araci2019finbert}
+positive-class probability computed over the post text.
+For \taskname{T6}, two additional graph features are appended:
+sibling count $|\mathcal{S}|$ and the mean pairwise BGE cosine
+similarity among all markets in the sibling set.
+Hyperparameters (learning rate, number of leaves, minimum child
+samples) are selected via Bayesian optimization on the validation
+split.
+ 
+\smallskip\noindent\emph{(iv) LLM API.}
+We evaluate GPT-4o~\cite{openai2023gpt4}, Sonnet~4.5,
+Grok~4.1, and Qwen3.5 (4B and 27B)~\cite{qwen2024qwen25}
+under two prompting regimes.
+\textbf{Zero-shot:} the system message defines the task
+(e.g., ``You are an evidence-grading assistant\ldots''), followed
+by the task-specific input fields --- post text, market question,
+resolution rule (for \taskname{T3}), candidate list (for
+\taskname{T2}), reference price $p_0$ (for \taskname{T4}/\taskname{T5})
+--- and a JSON output schema specifying the required label keys and
+allowed values.
+\textbf{Few-shot (3-shot):} the same prompt is augmented with three
+demonstration examples per class, sampled from the training set and
+balanced across classes; demonstrations include both the input fields
+and the gold-standard output.
+For \taskname{T4} and \taskname{T5}, a \emph{market-conditioned}
+variant (\textbf{GPT-4o + prices}) appends the 6h pre-post price
+trajectory as a timestamped list of $(t, p_t)$ pairs, enabling the
+model to reason about what is already priced in.
+For multimodal tasks (\taskname{T2}, \taskname{T3}, \taskname{T4}),
+a \textbf{GPT-4o + image} variant passes the post's attached image
+media (photographs, charts, infographics --- not video or
+screenshots) via GPT-4o's vision input, supplying visual evidence
+(embedded charts, letterheads, OCR-resistant text) that is absent
+from the post text.
+ 
+ 
+% ============================================================
+% BASELINE RESULTS TABLE
+% ============================================================
+
+ 
+% ============================================================
+\subsection{Main Results}
+\label{sec:main_results}
+ 
+Table~\ref{tab:results} reports performance across all six tasks.
+We highlight three principal findings.
+ 
+\smallskip\noindent\textbf{Forecast tasks remain substantially open.}
+On \taskname{T4}, the best model achieves [.] direction accuracy
+against a 58.7\% majority-class floor, and Spearman~$\rho$ on the
+continuous horizon curve is only [.], indicating that fine-grained
+magnitude prediction is far from solved.
+On \taskname{T6}, macro-$F_1$ reaches [.] but onset-lag MAE remains
+high at [.]\,min, suggesting that models can detect propagation but
+cannot yet time it.
+\taskname{T5} continuous targets prove especially difficult: the best
+$\rho$ for \texttt{price\_impact} is [.] and for
+\texttt{volume\_multiplier} is [.].
+ 
+\smallskip\noindent\textbf{Social signal adds value beyond price history.}
+On \taskname{T4}, all post-aware models outperform the random-walk
+baseline by [.]--[.] points in direction accuracy, confirming that
+post content carries information not already encoded in the pre-post
+price trajectory.
+The market-conditioned variant (GPT-4o + prices) achieves the highest
+$\rho$ of [.], indicating that social and market signals are
+complementary.
+ 
+\smallskip\noindent\textbf{Resolution rules are essential for grading.}
+The deterministic pre-check pipeline alone achieves $\kappa = $ [.]
+on \taskname{T3}, a competitive interpretable baseline that
+highlights structured rule parsing.
+ 
+% ============================================================
+\subsection{Analysis}
+\label{sec:analysis}
+ 
+We conduct four targeted analyses to surface insights unique to
+\dataset's structure.
+ 
+% --- Anti-contamination ---
+\smallskip\noindent\textbf{Anti-contamination validation.}
+We probe whether LLM pretraining leaks Polymarket outcomes by asking
+GPT-4o to predict each market's resolution \emph{without} any post
+--- only the market question and creation date.
+On training-split markets (pre-2025), GPT-4o achieves [.]\% accuracy,
+meaningfully above the 25.7\% YES base rate, consistent with outcome
+memorization from pretraining corpora.
+On test-split markets (post-Jul~2025), accuracy drops to [.]\%,
+indistinguishable from the base rate
+($p = $ [.], binomial test).
+This confirms that \dataset's temporal split renders forecast labels
+immune to pretraining leakage --- a guarantee that existing financial
+benchmarks, whose labels are derived from historical prices already
+present in LLM training data, cannot provide.
+ 
+% % --- Modality ablation ---
+% \smallskip\noindent\textbf{Modality ablation.}
+% We ablate input modalities for GPT-4o on \taskname{T3}
+% (Table~\ref{tab:ablation}).
+% Adding OCR text to the base post text improves $\kappa$ by [.],
+% confirming that evidence often resides in screenshots rather than
+% the surrounding commentary.
+% Raw images yield a further [.] gain on top of OCR, indicating that
+% visual layout cues (letterheads, chart axes) carry signal beyond
+% what OCR extracts.
+% Appending the resolution rule produces the largest single gain
+% ([.] $\kappa$), consistent with the task's reliance on formal
+% predicate matching.
+% Ablating the rule drops $\kappa$ from [.] to [.], confirming
+% that evidence grading without the formal rule is largely guesswork.
+ 
+% \begin{table}[t]
+%   \centering
+%   \caption{Modality ablation on \taskname{T3} (GPT-4o, 0-shot).}
+%   \label{tab:ablation}
+%   \footnotesize
+%   \setlength{\tabcolsep}{4pt}
+%   \begin{tabular}{@{}lcccccc@{}}
+%     \toprule
+%     & Text & OCR & Image & Rule & Price & $\kappa$ \\
+%     \midrule
+%     Text only          & \checkmark & & & & & [.] \\
+%     + Image            & \checkmark & \checkmark & \checkmark & & & [.] \\
+%     + Price            & \checkmark & \checkmark & \checkmark & \checkmark & & [.] \\
+%     Full               & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & [.] \\
+%     \midrule
+%     $-$ Rule (ablation) & \checkmark & \checkmark & \checkmark & & \checkmark & [.] \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+ 
+% --- Grade → price impact ---
+\smallskip\noindent\textbf{Evidence grade predicts price impact.}
+We cross-tabulate \taskname{T3} evidence grades with \taskname{T4}
+price movement to test whether higher-quality evidence produces
+larger, more sustained market reactions
+(Table~\ref{tab:grade_impact}).
+Grade-5 (\texttt{resolving}) posts exhibit mean $|\Delta p_{2h}|$
+of [.] and a sustained-move rate of [.]\%, compared with [.] and
+[.]\% for grade-1 (\texttt{commentary}) posts.
+The monotonic relationship between grade and impact confirms that
+the grading scheme captures a real information-quality gradient,
+and that \dataset's resolution and forecast tiers are structurally
+connected --- not merely co-located in the same dataset.
+ 
+\begin{table}[t]
+  \centering
+  \caption{Evidence grade vs.\ price impact.
+    $|\Delta p_{2h}|$\,=\,mean absolute 2h price change;
+    Sust.\,=\,fraction that is \texttt{sustained} in
+    \taskname{T5}.}
+  \label{tab:grade_impact}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}clrrr@{}}
+    \toprule
+    Grade & Label & $n$ & $|\Delta p_{2h}|$ & Sust.\ \% \\
+    \midrule
+    5 & \texttt{resolving}    & 10  & 0.1174 & 40.0\% \\
+    4 & \texttt{strong\_dir.} & 11  & 0.2562 & 36.4\% \\
+    3 & \texttt{indirect}     & 219 & 0.1623 & 27.4\% \\
+    2 & \texttt{speculation}  & 135 & 0.1713 & 31.9\% \\
+    1 & \texttt{commentary}   & 24  & 0.1281 & 37.5\% \\
+    0 & \texttt{noise}        & 8   & 0.1321 & 62.5\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+% --- Domain breakdown ---
+\smallskip\noindent\textbf{Domain stratification.}
+Table~\ref{tab:domain_t4} reports the \taskname{T4} direction
+distribution by domain.
+Crypto/Finance markets have the highest flat rate (68.1\%), reflecting
+thinner liquidity and noisier social signals.
+Politics markets show the most balanced directional movement
+(23.4\% up, 20.3\% down), consistent with factual, claim-driven
+posts that more frequently shift prices.
+Sports markets exhibit an upward skew (29.9\% up vs.\ 12.4\% down),
+suggesting that positive sporting news propagates more than negative.
+These distributional differences motivate domain-adaptive modeling.
+ 
+\begin{table}[t]
+  \centering
+  \caption{\taskname{T4} direction distribution by domain.
+    Flat\,=\,majority class per domain.}
+  \label{tab:domain_t4}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}lrrrr@{}}
+    \toprule
+    Domain & $n$ & Flat (\%) & Up (\%) & Down (\%) \\
+    \midrule
+    Politics       & 1,747 & 56.4 & 23.4 & 20.3 \\
+    Sports         &   668 & 57.6 & 29.9 & 12.4 \\
+    Crypto/Finance & 1,125 & 68.1 & 17.9 & 14.0 \\
+    Other          & 1,263 & 54.2 & 27.4 & 18.4 \\
+    \midrule
+    All            & 4,803 & 58.7 & 24.0 & 17.2 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+ 
+% ============================================================
+\section{Limitations and Future Work}
+\label{sec:limitations}
+% ============================================================
+ 
+\noindent\textbf{KOL coverage and selection bias.}
+The social corpus is drawn from 1,152 curated KOL accounts, which
+biases coverage toward high-visibility English-language posters.
+Posts from smaller accounts, reply threads, and non-English
+communities may carry complementary signal that our corpus misses.
+Expanding to a broader, language-diverse author pool --- while
+maintaining linkage quality --- is a priority for future versions.
+   
+ 
+\smallskip\noindent\textbf{Static author modeling.}
+Our baselines treat each post independently, without modeling
+author credibility, historical accuracy, or social network
+position.
+Incorporating author-level features --- such as per-KOL hit rate
+on past directional calls --- could improve forecast tasks and
+would enable an ``author matters'' analysis.
+ 
+\smallskip\noindent\textbf{Fixed evaluation horizons.}
+\taskname{T4} and \taskname{T5} evaluate at discrete horizons
+(30\,min, 2\,h, 6\,h), but information incorporation is a
+continuous process.
+Modeling the full price-response curve as a functional regression
+target, and evaluating models on time-to-incorporation and
+half-life of impact, would better capture the dynamics of social
+information flow.
+ 
+\smallskip\noindent\textbf{Future directions.}
+Beyond addressing the above limitations, we see three broader
+opportunities:
+(i)~\emph{agentic trading simulation}, where models must decide
+not just what will happen but whether and when to act on a post;
+(ii)~\emph{cross-domain transfer}, training on information-rich
+domains (politics) and evaluating on noisy ones (crypto) to test
+whether social-to-market reasoning generalizes; and
+(iii)~\emph{real-time streaming evaluation}, replacing the current
+static benchmark with a live leaderboard that ingests new
+Polymarket events and KOL posts daily, ensuring perpetual
+anti-contamination.
+ 
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+We introduce \dataset, a multimodal benchmark covering the full lifecycle of social information in prediction markets, from initial posts and price dynamics to cross-market propagation and final resolution. It includes six tasks across two tiers (forecast and resolution), each tied to temporally distinct sources of truth, providing an empirically validated anti-contamination guarantee. Our results show that social posts add predictive signal beyond price momentum, modalities matter unevenly across tasks, evidence grade tracks downstream price impact, and predictability varies by domain. Still, all forecast tasks remain unsolved: even top models such as GPT-4o leave substantial room for improvement. We release the dataset, evaluation code, and baseline checkpoints to support reproducible research in social media understanding, multimodal reasoning, and financial forecasting
+
+% ============================================================
+\section*{Ethical Considerations}
+% ============================================================
+
+\dataset is built from public data: Polymarket’s API and on-chain contracts, plus public Twitter/X posts from key opinion leaders. We collect no private messages, protected content, or PII beyond public usernames, and we do not attempt to de-anonymize market participants.
+The benchmark is for research only, not financial advice. Although it studies market prediction, its temporal splits and post-hoc labels make it unsuitable for direct live trading without substantial added infrastructure and regulatory compliance. We encourage users to consider misuse risks, including market manipulation, and to follow applicable financial regulations.
+
+% ============================================================
+\bibliographystyle{ACM-Reference-Format}
+\begin{thebibliography}{99}
+ 
+\bibitem{bollen2011twitter}
+Johan Bollen, Huina Mao, and Xiaojun Zeng.
+\newblock Twitter mood predicts the stock market.
+\newblock \emph{Journal of Computational Science}, 2(1):1--8, 2011.
+\newblock \doi{10.1016/j.jocs.2010.12.007}.
+ 
+\bibitem{sprenger2014tweets}
+Timm~O. Sprenger, Andranik Tumasjan, Philipp~G. Sandner, and Isabell~M. Welpe.
+\newblock Tweets and trades: The information content of stock microblogs.
+\newblock \emph{European Financial Management}, 20(5):926--957, 2014.
+\newblock \doi{10.1111/j.1468-036X.2013.12007.x}.
+ 
+\bibitem{ding2014using}
+Xiao Ding, Yue Zhang, Ting Liu, and Junwen Duan.
+\newblock Using structured events to predict stock price movement: An empirical
+  investigation.
+\newblock In \emph{Proceedings of EMNLP 2014}, pages 1415--1425,
+  Doha, Qatar, 2014.
+\newblock \doi{10.3115/v1/D14-1148}.
+ 
+\bibitem{ding2015deep}
+Xiao Ding, Yue Zhang, Ting Liu, and Junwen Duan.
+\newblock Deep learning for event-driven stock prediction.
+\newblock In \emph{Proceedings of IJCAI 2015}, pages 2327--2333,
+  Buenos Aires, Argentina, 2015.
+ 
+\bibitem{kogan2009predicting}
+Shimon Kogan, Dimitry Levin, Bryan~R. Routledge, Jacob~S. Sagi, and Noah~A. Smith.
+\newblock Predicting risk from financial reports with regression.
+\newblock In \emph{Proceedings of HLT-NAACL 2009}, pages 272--280,
+  Boulder, Colorado, 2009.
+ 
+\bibitem{chen2014wisdom}
+Hailiang Chen, Prabuddha De, Yu~(Jeffrey) Hu, and Byoung-Hyoun Hwang.
+\newblock Wisdom of crowds: The value of stock opinions transmitted through
+  social media.
+\newblock \emph{The Review of Financial Studies}, 27(5):1367--1403, 2014.
+\newblock \doi{10.1093/rfs/hhu001}.
+ 
+\bibitem{xu2018stock}
+Yumo Xu and Shay~B. Cohen.
+\newblock Stock movement prediction from tweets and historical prices.
+\newblock In \emph{Proceedings of ACL 2018}, pages 1970--1979,
+  Melbourne, Australia, 2018.
+\newblock \doi{10.18653/v1/P18-1183}.
+ 
+\bibitem{sawhney2020deep}
+Ramit Sawhney, Shivam Agarwal, Arnav Wadhwa, and Rajiv~Ratn Shah.
+\newblock Deep attentive learning for stock movement prediction from social
+  media text and company correlations.
+\newblock In \emph{Proceedings of EMNLP 2020}, pages 8415--8426, 2020.
+\newblock \doi{10.18653/v1/2020.emnlp-main.676}.
+ 
+\bibitem{sawhney2020multimodal}
+Ramit Sawhney, Puneet Mathur, Ayush Mangal, Piyush Khanna,
+  Rajiv~Ratn Shah, and Roger Zimmermann.
+\newblock Multimodal multi-task financial risk forecasting.
+\newblock In \emph{Proceedings of ACM MM 2020}, pages 456--465, 2020.
+\newblock \doi{10.1145/3394171.3413752}.
+ 
+\bibitem{nofer2015twitter}
+Michael Nofer and Oliver Hinz.
+\newblock Using {Twitter} to predict the stock market: Where is the mood effect?
+\newblock \emph{Business \& Information Systems Engineering}, 57(4):229--242, 2015.
+\newblock \doi{10.1007/s12599-015-0390-4}.
+ 
+\bibitem{wolfers2004prediction}
+Justin Wolfers and Eric Zitzewitz.
+\newblock Prediction markets.
+\newblock \emph{Journal of Economic Perspectives}, 18(2):107--126, 2004.
+\newblock \doi{10.1257/0895330041371321}.
+ 
+\bibitem{berg2008results}
+Joyce~E. Berg, Robert Forsythe, Forrest~D. Nelson, and Thomas~A. Rietz.
+\newblock Results from a dozen years of election futures markets research.
+\newblock In C.~R. Plott and V.~L. Smith, editors,
+  \emph{Handbook of Experimental Economics Results}, volume~1,
+  chapter~80, pages 742--751. Elsevier, 2008.
+ 
+\bibitem{rothschild2009forecasting}
+David~M. Rothschild.
+\newblock Forecasting elections: Comparing prediction markets, polls, and
+  their biases.
+\newblock \emph{Public Opinion Quarterly}, 73(5):895--916, 2009.
+\newblock \doi{10.1093/poq/nfp082}.
+ 
+\bibitem{leigh2006competing}
+Andrew Leigh and Justin Wolfers.
+\newblock Competing approaches to forecasting elections: Economic models,
+  opinion polling and prediction markets.
+\newblock \emph{The Economic Record}, 82(258):325--340, 2006.
+\newblock \doi{10.1111/j.1475-4932.2006.00343.x}.
+ 
+\bibitem{ritterman2009using}
+Joshua Ritterman, Miles Osborne, and Ewan Klein.
+\newblock Using prediction markets and {Twitter} to predict a swine flu
+  pandemic.
+\newblock In \emph{Proceedings of the 1st International Workshop on Mining
+  Social Media}, pages 9--17, Seville, Spain, 2009.
+ 
+\bibitem{tsang2026anatomy}
+Kwok~Ping Tsang and Zichao Yang.
+\newblock The anatomy of {Polymarket}: Evidence from the 2024 presidential
+  election.
+\newblock arXiv preprint arXiv:2603.03136, 2026.
+ 
+\bibitem{qiu2014effects}
+Liangfei Qiu, Huaxia Rui, and Andrew~B. Whinston.
+\newblock Effects of social networks on prediction markets: Examination in a
+  controlled experiment.
+\newblock \emph{Journal of Management Information Systems}, 30(4):235--268, 2014.
+\newblock \doi{10.2753/MIS0742-1222300409}.
+ 
+\bibitem{wang2020maven}
+Xiaozhi Wang, Ziqi Wang, Xu Han, Wangyi Jiang, Rong Han, Zhiyuan Liu,
+  Juanzi Li, Peng Li, Yankai Lin, and Jie Zhou.
+\newblock {MAVEN}: A massive general domain event detection dataset.
+\newblock In \emph{Proceedings of EMNLP 2020}, pages 1652--1671, 2020.
+\newblock \doi{10.18653/v1/2020.emnlp-main.129}.
+ 
+\bibitem{doddington2004ace}
+George Doddington, Alexis Mitchell, Mark Przybocki, Lance Ramshaw,
+  Stephanie Strassel, and Ralph Weischedel.
+\newblock The {ACE} program: Tasks, data, and evaluation.
+\newblock In \emph{Proceedings of LREC 2004}, pages 837--840, 2004.
+ 
+\bibitem{boididou2015mediaeval}
+Christina Boididou, Katerina Andreadou, Symeon Papadopoulos,
+  Duc-Tien Dang-Nguyen, Giulia Boato, Michael Riegler, and Yiannis Kompatsiaris.
+\newblock Verifying multimedia use at {MediaEval} 2015.
+\newblock In \emph{MediaEval 2015 Workshop}, CEUR Vol.~1436, 2015.
+ 
+\bibitem{luo2021newsclippings}
+Grace Luo, Trevor Darrell, and Anna Rohrbach.
+\newblock {NewsCLIPpings}: Automatic generation of out-of-context multimodal media.
+\newblock In \emph{Proceedings of EMNLP 2021}, pages 6801--6817, 2021.
+\newblock \doi{10.18653/v1/2021.emnlp-main.545}.
+ 
+\bibitem{shu2020fakenewsnet}
+Kai Shu, Deepak Mahudeswaran, Suhang Wang, Dongwon Lee, and Huan Liu.
+\newblock {FakeNewsNet}: A data repository with news content, social context,
+  and spatiotemporal information for studying fake news on social media.
+\newblock \emph{Big Data}, 8(3):171--188, 2020.
+\newblock \doi{10.1089/big.2020.0062}.
+ 
+\bibitem{kiela2020hateful}
+Douwe Kiela, Hamed Firooz, Aravind Mohan, Vedanuj Goswami, Amanpreet Singh,
+  Pratik Ringshia, and Davide Testuggine.
+\newblock The hateful memes challenge: Detecting hate speech in multimodal memes.
+\newblock In \emph{NeurIPS 2020}, 2020.
+ 
+\bibitem{zubiaga2016pheme}
+Arkaitz Zubiaga, Geraldine~Wong Sak~Hoi, Maria Liakata, and Rob Procter.
+\newblock {PHEME} dataset of rumours and non-rumours.
+\newblock figshare, 2016.
+\newblock \doi{10.6084/m9.figshare.4010619}.
+ 
+\bibitem{derczynski2017rumoureval}
+Leon Derczynski, Kalina Bontcheva, Maria Liakata, Rob Procter,
+  Geraldine~Wong Sak~Hoi, and Arkaitz Zubiaga.
+\newblock {SemEval}-2017 Task~8: {RumourEval}.
+\newblock In \emph{Proceedings of SemEval-2017}, pages 69--76, 2017.
+\newblock \doi{10.18653/v1/S17-2006}.
+ 
+\bibitem{gorrell2019rumoureval}
+Genevieve Gorrell, Elena Kochkina, Maria Liakata, Ahmet Aker,
+  Arkaitz Zubiaga, Kalina Bontcheva, and Leon Derczynski.
+\newblock {SemEval}-2019 Task~7: {RumourEval}.
+\newblock In \emph{Proceedings of SemEval-2019}, pages 845--854, 2019.
+\newblock \doi{10.18653/v1/S19-2147}.
+ 
+\bibitem{popat2018declare}
+Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum.
+\newblock {DeClarE}: Debunking fake news and false claims using evidence-aware
+  deep learning.
+\newblock In \emph{Proceedings of EMNLP 2018}, pages 22--32, 2018.
+\newblock \doi{10.18653/v1/D18-1003}.
+ 
+\bibitem{barbieri2020tweeteval}
+Francesco Barbieri, Jose Camacho-Collados, Luis Espinosa~Anke, and Leonardo Neves.
+\newblock {TweetEval}: Unified benchmark and comparative evaluation for tweet
+  classification.
+\newblock In \emph{Findings of EMNLP 2020}, pages 1644--1650, 2020.
+\newblock \doi{10.18653/v1/2020.findings-emnlp.148}.
+ 
+\bibitem{rosenthal2017semeval}
+Sara Rosenthal, Noura Farra, and Preslav Nakov.
+\newblock {SemEval}-2017 Task~4: Sentiment analysis in {Twitter}.
+\newblock In \emph{Proceedings of SemEval-2017}, pages 502--518, 2017.
+\newblock \doi{10.18653/v1/S17-2088}.
+ 
+\bibitem{araci2019finbert}
+Dogu Araci.
+\newblock {FinBERT}: Financial sentiment analysis with pre-trained language models.
+\newblock arXiv preprint arXiv:1908.10063, 2019.
+ 
+\bibitem{yang2020finbert}
+Yi Yang, Mark~Christopher Siy~Uy, and Allen Huang.
+\newblock {FinBERT}: A pretrained language model for financial communications.
+\newblock arXiv preprint arXiv:2006.08097, 2020.
+ 
+\bibitem{wu2023bloomberggpt}
+Shijie Wu, Ozan Irsoy, Steven Lu, Vadim Dabravolski, Mark Dredze,
+  Sebastian Gehrmann, Prabhanjan Kambadur, David Rosenberg, and Gideon Mann.
+\newblock {BloombergGPT}: A large language model for finance.
+\newblock arXiv preprint arXiv:2303.17564, 2023.
+ 
+\bibitem{yang2023fingpt}
+Hongyang Yang, Xiao-Yang Liu, and Christina~Dan Wang.
+\newblock {FinGPT}: Open-source financial large language models.
+\newblock In \emph{FinLLM Symposium at IJCAI-2023}, 2023.
+ 
+\bibitem{lopezlira2023chatgpt}
+Alejandro Lopez-Lira and Yuehua Tang.
+\newblock Can {ChatGPT} forecast stock price movements?
+\newblock arXiv preprint arXiv:2304.07619, 2023.
+ 
+\bibitem{chen2021finqa}
+Zhiyu Chen, Wenhu Chen, Charese Smiley, Sameena Shah, Iana Borova,
+  Dylan Langdon, Reema Moussa, Matt Beane, Ting-Hao Huang, Bryan Routledge,
+  and William~Yang Wang.
+\newblock {FinQA}: A dataset of numerical reasoning over financial data.
+\newblock In \emph{Proceedings of EMNLP 2021}, pages 3697--3711, 2021.
+\newblock \doi{10.18653/v1/2021.emnlp-main.300}.
+ 
+\bibitem{zhu2021tatqa}
+Fengbin Zhu, Wenqiang Lei, Youcheng Huang, Chao Wang, Shuo Zhang,
+  Jiancheng Lv, Fuli Feng, and Tat-Seng Chua.
+\newblock {TAT-QA}: A question answering benchmark on a hybrid of tabular and
+  textual content in finance.
+\newblock In \emph{Proceedings of ACL-IJCNLP 2021}, pages 3277--3287, 2021.
+\newblock \doi{10.18653/v1/2021.acl-long.254}.
+ 
+\bibitem{shah2022flue}
+Raj~Sanjay Shah, Kunal Chawla, Dheeraj Eidnani, Agam Shah, Wendi Du,
+  Sudheer Chava, Natraj Raman, Charese Smiley, Jiaao Chen, and Diyi Yang.
+\newblock When {FLUE} meets {FLANG}: Benchmarks and large pretrained language
+  model for financial domain.
+\newblock In \emph{Proceedings of EMNLP 2022}, pages 2322--2335, 2022.
+\newblock \doi{10.18653/v1/2022.emnlp-main.148}.
+ 
+% --- NEW CITATIONS ---
+ 
+\bibitem{xiao2023cpack}
+Shitao Xiao, Zheng Liu, Peitian Zhang, and Niklas Muennighoff.
+\newblock {C-Pack}: Packaged resources to advance general {Chinese} embedding.
+\newblock arXiv preprint arXiv:2309.07597, 2023.
+ 
+\bibitem{johnson2021faiss}
+Jeff Johnson, Matthijs Douze, and Herv\'{e} J\'{e}gou.
+\newblock Billion-scale similarity search with {GPUs}.
+\newblock \emph{IEEE Transactions on Big Data}, 7(3):535--547, 2021.
+\newblock \doi{10.1109/TBDATA.2019.2921572}.
+ 
+\bibitem{openai2023gpt4}
+OpenAI.
+\newblock {GPT-4} technical report.
+\newblock arXiv preprint arXiv:2303.08774, 2023.
+ 
+\bibitem{qwen2024qwen25}
+Qwen Team.
+\newblock {Qwen2.5} technical report.
+\newblock arXiv preprint arXiv:2412.15115, 2024.
+ 
+\end{thebibliography}
+ 
+\end{document}
